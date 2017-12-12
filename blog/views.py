@@ -3,6 +3,7 @@ import markdown
 from django.shortcuts import render, get_object_or_404
 
 from blog.models import Post, Category
+from comments.forms import CommentForm
 
 """
 def index(request):
@@ -35,7 +36,12 @@ def detail(request, pk):
                                       'markdown.extensions.codehilite',
                                       'markdown.extensions.toc',
                                   ])
-    return render(request, 'blog/detail.html', context={'post': post})
+    form = CommentForm()
+    # 获取评论
+    comment_list = post.comment_set.all()
+    # 将表单，文章，评论传递
+    context = {'post': post, 'form': form, 'comment_list': comment_list}
+    return render(request, 'blog/detail.html', context=context)
 
 
 # 归档

@@ -28,8 +28,8 @@ class Post(models.Model):
     title = models.CharField(max_length=70)
     # 正文
     body = models.TextField()
-    created_time = models.DateTimeField()
-    modified_time = models.DateTimeField()
+    created_time = models.DateTimeField(auto_now_add=True)
+    modified_time = models.DateTimeField(auto_now_add=True)
     # 摘要
     # 指定 CharField 的 blank=True 参数值后就可以允许空值了。
     excerpt = models.CharField(max_length=200, blank=True)
