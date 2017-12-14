@@ -1,4 +1,5 @@
 # coding: utf-8
+import markdown
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -6,6 +7,7 @@ from django.db import models
 
 # 分类
 from django.urls import reverse
+from django.utils.html import strip_tags
 
 
 class Category(models.Model):
@@ -45,12 +47,36 @@ class Post(models.Model):
     # 这里我们通过 ForeignKey 把文章和 User 关联了起来。
     # 因为我们规定一篇文章只能有一个作者，而一个作者可能会写多篇文章，因此这是一对多的关联关系，和 Category 类似。
     author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    # 阅读量
+    views = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
         return reverse('blog:detail', kwargs={'pk': self.pk})
+
+    def increase_views(self):
+        self.views += 1
+        self.save(update_fields=['views'])
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        # 首先实例化一个 Markdown 类，用于渲染 body 的文本
+        md = markdown.Markdown(extensions=[
+            'markdown.extensions.extra',
+            'markdown.extensions.codehilite',
+        ])
+        # 如果没有摘要
+        if not self.excerpt or self.excerpt != strip_tags(md.convert(self.body))[:200]:
+            # 先将 Markdown 文本渲染成 HTML 文本
+            # strip_tags 去掉 HTML 文本的全部 HTML 标签
+            # 从文本摘取前 54 个字符赋给 excerpt
+            # self.excerpt = strip_tags(md.convert(self.body))[:200]
+            self.excerpt = strip_tags(md.convert(self.body))[:200]
+            # 调用父类的 save 方法将数据保存到数据库中
+        super(Post, self).save(force_insert, force_update, using,
+                               update_fields)
 
     class Meta:
         ordering = ['-created_time', 'title']
