@@ -122,3 +122,10 @@ HAYSTACK_CONNECTIONS = {
 }
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 10
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+DEFAULT_FILE_STORAGE = 'qiniustorage.backends.QiniuMediaStorage'
+QINIU_ACCESS_KEY = 'MFRIZOUgVMGo-hABDKKIJWTcojsSwDbCrnAcPWDX'
+QINIU_SECRET_KEY = 'UhRCwwgmXKdljfRikFpMadYXkwh66NtQCXYgVsFx'
+QINIU_BUCKET_NAME = 'lengyue'
+QINIU_BUCKET_DOMAIN = 'dn-lengyue.qbox.me/'
+
+QINIU_SECURE_URL = True      #使用ht

@@ -1,13 +1,14 @@
 # coding: utf-8
+
 import markdown
 from django.contrib.auth.models import User
 from django.db import models
-
-# Create your models here.
-
 # 分类
 from django.urls import reverse
 from django.utils.html import strip_tags
+
+
+# Create your models here.
 
 
 class Category(models.Model):
@@ -49,6 +50,8 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     # 阅读量
     views = models.PositiveIntegerField(default=0)
+
+    image = models.ImageField(upload_to='image/%Y/%m/%d', null=True, blank=True)
 
     def __str__(self):
         return self.title
