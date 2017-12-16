@@ -128,4 +128,4 @@ QINIU_SECRET_KEY = 'UhRCwwgmXKdljfRikFpMadYXkwh66NtQCXYgVsFx'
 QINIU_BUCKET_NAME = 'lengyue'
 QINIU_BUCKET_DOMAIN = 'dn-lengyue.qbox.me/'
 
-QINIU_SECURE_URL = True      #使用ht
+QINIU_SECURE_URL = True  # 使用ht

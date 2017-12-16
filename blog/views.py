@@ -4,7 +4,8 @@ from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import DetailView
 from django.views.generic import ListView
-from markdown.extensions.toc import TocExtension, slugify
+from markdown.extensions.toc import TocExtension
+from django.utils.text import slugify
 
 from blog.models import Post, Category, Tag
 from comments.forms import CommentForm
@@ -186,31 +187,27 @@ class PostDetailView(DetailView):
         # 覆写 get_object 方法的目的是因为需要对 post 的 body 值进行渲染
         post = super().get_object(queryset=None)
         # 原始body
-        body = '[TOC]\r\n' + post.body
+        # body = '[TOC]\r\n' + post.body
         # # 渲染 Post.body
         # post.body = markdown.markdown(post.body,
         #                               extensions=[
         #                                   'markdown.extensions.extra',
         #                                   'markdown.extensions.codehilite',
         #                               ])
-        # md = markdown.Markdown(extensions=[
-        #     'markdown.extensions.extra',
-        #     'markdown.extensions.toc',
-        #     TocExtension(slugify=slugify),
-        # ])
-        # # 默认加目录
-        # md = md.convert(body)
-        # post.toc = md
-        # return post
-        # 覆写 get_object 方法的目的是因为需要对 post 的 body 值进行渲染
+
         md = markdown.Markdown(extensions=[
             'markdown.extensions.extra',
             'markdown.extensions.codehilite',
             'markdown.extensions.toc',
             TocExtension(slugify=slugify),
         ])
-        post.body = md.convert('[TOC]\r\n' + post.body)
+        post.body = md.convert('[TOC]\r\n'+post.body)
+        # '[TOC]\r\n' +
+        # body =
+        # md.convert(body)
         post.toc = md.toc
+        print(post.body)
+        print(post.toc)
         return post
 
     """
