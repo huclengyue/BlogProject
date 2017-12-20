@@ -18,19 +18,33 @@ class PostAdmin(admin.ModelAdmin):
     filter_horizontal = ('tags',)
     # 页面顶部存在输入框
     save_on_top = True
-    # fieldsets = (
-    #     ("其他设置", {'fields': ['category', 'author']}),
-    # )
+    fieldsets = (
+        ("文章", {'fields': ['title', 'body']}),
+        ("其他", {'fields': ['category', 'tags']}),
+    )
 
 
 class BlogAdmin(admin.ModelAdmin):
     list_display = ['site_name', 'UserName']
 
 
+class FriendlyAdmin(admin.ModelAdmin):
+    list_display = ['site_name', 'link']
+    fields = (('site_name', 'link'),)
+
+
+class CatalogAdmin(admin.ModelAdmin):
+    list_display = ['index', 'name', 'link']
+    fields = (('index', 'name', 'link'),)
+    list_editable = ['name', 'link']
+
+
 # 把新增的 PostAdmin 也注册进来
 admin.site.register(Post, PostAdmin)
 admin.site.register(Category)
 admin.site.register(Tag)
-admin.site.register(BlogSet,BlogAdmin)
+admin.site.register(BlogSet, BlogAdmin)
+admin.site.register(Friendly, FriendlyAdmin)
+admin.site.register(Catalog, CatalogAdmin)
 admin.site.site_header = 'Blog后台管理系统'
 admin.site.site_title = 'By LengYue'

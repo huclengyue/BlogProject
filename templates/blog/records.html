@@ -1,0 +1,54 @@
+{% extends 'base2.html' %}
+{% load blog_tags %}
+{% block title %}文章归档&nbsp;-&nbsp;{{ blog.site_name }}{% endblock title %}
+{% block main %}
+    <div class="content-wrap page-archive">
+        <div id="content" class="content">
+            <section id="posts" class="posts-collapse">
+                <span class="archive-move-on"></span>
+                <span class="archive-page-counter">好! 目前共计&nbsp;{% get_post_count %}&nbsp;篇日志。 继续努力。</span>
+                <div id="hidden-temp-container" style="display: none;">
+                    {% for post in post_list %}
+                        <article class="" itemscope="" itemtype="http://schema.org/Article">
+                            <header class="post-header">
+                                <h1 class="post-title">
+                                    <a class="post-title-link" href="{{ post.get_absolute_url }}" itemprop="url">
+                                        <span itemprop="name">{{ post.title }}</span>
+                                    </a>
+                                </h1>
+                                <div class="post-meta">
+                                    <time year="{{ post.created_time|date:"Y" }}">
+                                        {{ post.created_time|date:"m-d" }}
+                                    </time>
+                                </div>
+                            </header>
+                        </article>
+                    {% endfor %}
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script type="text/javascript">
+        var counter = 0;
+        var currentYear;
+        $("#hidden-temp-container article").each(function () {
+            if (counter == 0) {
+                currentYear = $(this).find("time").attr("year");
+                $("#posts").html($("#posts").html() + '<div class="collection-title">' +
+                    '<h2 class="archive-year motion-element" id="archive-year-' + currentYear + '" style="opacity: 1;">' + currentYear + '</h2>' +
+                    '</div>');
+            }
+            if ($(this).find("time").attr("year") < currentYear) {
+                currentYear = $(this).find("time").attr("year");
+                $("#posts").html($("#posts").html() + '<div class="collection-title">' +
+                    '<h2 class="archive-year motion-element" id="archive-year-' + currentYear + '" style="opacity: 1;">' + currentYear + '</h2>' +
+                    '</div>');
+            }
+            $(this).addClass("post post-type-normal");
+            $("#posts").append($(this));
+            counter += 1;
+        });
+    </script>
+{% endblock %}

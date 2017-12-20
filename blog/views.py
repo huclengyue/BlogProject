@@ -1,11 +1,10 @@
 # Create your views here.
 import markdown
 from django.db.models import Q
+from django.db.models.aggregates import Count
 from django.shortcuts import render, get_object_or_404
-from django.utils.text import slugify
 from django.views.generic import DetailView
 from django.views.generic import ListView
-from markdown.extensions.toc import TocExtension
 
 from blog.models import Post, Category, Tag
 from comments.forms import CommentForm
@@ -15,13 +14,13 @@ def index(request):
     # 我们首先把 HTTP请求传了进去，然后render根据第二个参数的值index.html找到这个模板文件并读取模板中的内容。之后render
     # 根据我们传入的context参数的值把模板中的变量替换为我们传递的变量的值，{{title}}被替换成了context字典中title对应的值，同理
     # {{welcome}}也被替换成相应的值。
-    return render(request, "index.html", context={"title": "我的博客首页", "welcome": "欢迎访问我的博客"})
+    return render(request, "index2.html", context={"title": "我的博客首页", "welcome": "欢迎访问我的博客"})
 """
 
 """
 请使用下方真正的首页视图函数
 def index(request):
-    return render(request, 'blog/index.html', context={
+    return render(request, 'blog/index2.html', context={
         'title': '我的博客首页',
         'welcome': '欢迎访问我的博客首页'
     })
@@ -30,7 +29,7 @@ def index(request):
 
 def index(request):
     post_list = Post.objects.all()
-    return render(request, 'blog/index.html', context={'post_list': post_list})
+    return render(request, 'blog/index2.html', context={'post_list': post_list})
 
 
 class IndexView(ListView):
@@ -38,6 +37,11 @@ class IndexView(ListView):
     template_name = 'blog/index2.html'
     context_object_name = 'post_list'
     paginate_by = 5
+
+
+def get_tags_list(request):
+    tags_list = Tag.objects.annotate(num_posts=Count('post')).filter(num_posts__gt=0)
+    return render(request, 'blog/tags.html', context={'tags_list': tags_list})
 
 
 '''
@@ -189,30 +193,16 @@ class PostDetailView(DetailView):
         # 原始body
         # body = '[TOC]\r\n' + post.body
         # # 渲染 Post.body
-        # post.body = markdown.markdown(post.body,
-        #                               extensions=[
-        #                                   'markdown.extensions.extra',
-        #                                   'markdown.extensions.codehilite',
-        #                               ])
-
-        md = markdown.Markdown(extensions=[
-            'markdown.extensions.extra',
-            'markdown.extensions.codehilite',
-            'markdown.extensions.toc',
-            TocExtension(slugify=slugify),
-        ])
-        post.body = md.convert('[TOC]\r\n' + post.body)
-        # '[TOC]\r\n' +
-        # body =
-        # md.convert(body)
-        post.toc = md.toc
-        # 删除body上的目录
-        post.body = post.body[len(post.toc):len(post.body)]
+        post.body = markdown.markdown(post.body,
+                                      extensions=[
+                                          'markdown.extensions.extra',
+                                          'markdown.extensions.codehilite',
+                                      ])
         return post
 
     """
      在视图函数中将模板变量传递给模板是通过给 render 函数的 context 参数传递一个字典实现的，
-      例如 render(request, 'blog/index.html', context={'post_list': post_list})，
+      例如 render(request, 'blog/index2.html', context={'post_list': post_list})，
       这里传递了一个 {'ost_list': post_list} 字典给模板。
       在类视图中，这个需要传递的模板变量字典是通过 get_context_data 获得的，
       所以我们复写该方法，以便我们能够自己再插入一些我们自定义的模板变量进去。
@@ -233,17 +223,23 @@ class PostDetailView(DetailView):
 # 归档
 def archives(request, year, month):
     post_list = Post.objects.filter(created_time__year=year, created_time__month=month)
-    return render(request, 'blog/index.html', context={'post_list': post_list})
+    return render(request, 'blog/index2.html', context={'post_list': post_list})
 
 
 class ArchiveView(ListView):
     model = Post
-    template_name = 'blog/index.html'
+    template_name = 'blog/index2.html'
     context_object_name = 'post_list'
 
     def get_queryset(self):
         return super(ArchiveView, self).get_queryset().filter(created_time__year=self.kwargs.get('year'),
                                                               created_time__month=self.kwargs.get('month'))
+
+
+class ArchiveViewList(ListView):
+    model = Post
+    template_name = 'blog/records.html'
+    context_object_name = 'post_list'
 
 
 '''
@@ -257,12 +253,12 @@ get_object_or_404 函数和 detail 视图中一样，其作用是如果用户访
 def category(request, pk):
     cate = get_object_or_404(Category, pk=pk)
     post_list = Post.objects.filter(category=cate)
-    return render(request, 'blog/index.html', context={'post_list': post_list})
+    return render(request, 'blog/index2.html', context={'post_list': post_list})
 
 
 class CategoryView(ListView):
     model = Post
-    template_name = 'blog/index.html'
+    template_name = 'blog/index2.html'
     context_object_name = 'post_list'
 
     # 我们覆写了父类的 get_queryset 方法。该方法默认获取指定模型的全部列表数据。
@@ -272,9 +268,19 @@ class CategoryView(ListView):
         return super(CategoryView, self).get_queryset().filter(category=cate)
 
 
+class CategoryViewByName(ListView):
+    model = Post
+    template_name = 'blog/index2.html'
+    context_object_name = 'post_list'
+
+    def get_queryset(self):
+        cate = get_object_or_404(Category, name=self.kwargs.get('name'))
+        return super(CategoryViewByName, self).get_queryset().filter(category=cate)
+
+
 class TagView(ListView):
     model = Post
-    template_name = 'blog/index.html'
+    template_name = 'blog/index2.html'
     context_object_name = 'post_list'
 
     def get_queryset(self):
@@ -282,11 +288,29 @@ class TagView(ListView):
         return super().get_queryset().filter(tags=cate)
 
 
+class TagViewByName(ListView):
+    model = Post
+    template_name = 'blog/tag_post.html'
+    context_object_name = 'post_list'
+    query_tag = ''
+
+    def get_queryset(self):
+        self.query_tag = self.kwargs.get('name')
+        cate = get_object_or_404(Tag, name=self.query_tag)
+        return super().get_queryset().filter(tags=cate)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'tag_name': self.query_tag})
+        return context
+
+
 def search(request):
     q = request.GET.get('q')
     error_msg = ''
     if not q:
         error_msg = '请输入关键词'
-        return render(request, 'blog/index.html', {'error_msg': error_msg})
+        return render(request, 'blog/index2.html', {'error_msg': error_msg})
     post_list = Post.objects.filter(Q(title__icontains=q) | Q(body__icontains=q))
-    return render(request, 'blog/index.html', {'error_msg': error_msg, 'post_list': post_list})
+    return render(request, 'blog/index2.html', {'error_msg': error_msg, 'post_list': post_list})

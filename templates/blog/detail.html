@@ -2,9 +2,7 @@
 {% load blog_tags %}
 {% get_blog_set as blog %}
 
-{% block title %}
-    {{ post.title }}&nbsp;|&nbsp;{{ blog.site_name }}
-{% endblock title %}
+{% block title %}{{ post.title }}&nbsp;-&nbsp;{{ blog.site_name }}{% endblock title %}
 {% block main %}
     <div class="content-wrap  page-post-detail">
         <div id="content" class="content">
@@ -60,10 +58,43 @@
 
 
 {% endblock main %}
-
-{% block toc %}
-    <div class="widget widget-content">
-        <h3 class="widget-title">文章目录</h3>
-        {{ post.toc|safe }}
-    </div>
-{% endblock toc %}
+{% block sidebar %}page-post-detail{% endblock %}
+{% block post_select %}
+<ul class="sidebar-nav motion-element">
+            <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+                文章目录
+            </li>
+            <li class="sidebar-nav-overview" data-target="site-overview">
+                站点概览
+            </li>
+        </ul>
+{% endblock post_select %}
+{% block select %}
+    <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+        <div class="post-toc">
+            <div class="post-toc-content">
+                <ol class="nav" id="category_nav">
+                </ol>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{#{% block toc %}#}
+{#    <div class="widget widget-content">#}
+{#        <h3 class="widget-title">文章目录</h3>#}
+{#        {{ post.toc|safe }}#}
+{#    </div>#}
+{#{% endblock toc %}#}
+{% block script %}
+    <script type="text/javascript">
+        $(".site-overview").css("display", "none");
+        if ($("#content h2").length > 0) {
+            $("#content h2").each(function () {
+                $(this).attr("id", $(this).html().replace(/ +/g, '-').replace(/<(\/a|a).*>/g, ""));
+                $("#category_nav").html($("#category_nav").html() + '<li class="nav-item nav-level-2"><a class="nav-link" href="#' + $(this).html().replace(/ +/g, '-').replace(/<(\/a|a).*>/g, "") + '"><span class="nav-text">' + $(this).html().replace(/<(\/a|a).*>/g, "") + '</span></a></li>');
+            });
+        } else {
+            $("#category_nav").html($("#category_nav").html() + '<span class="nav-text">暂无目录</span>');
+        }
+    </script>
+{% endblock %}

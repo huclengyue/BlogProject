@@ -1,0 +1,68 @@
+{% extends 'base2.html' %}
+{% load blog_tags %}
+{% block title %}Tags&nbsp;-&nbsp;{{ blog.site_name }}{% endblock title %}
+{% block main %}
+    <div class="content-wrap">
+        <div id="content" class="content">
+            <div id="posts" class="posts-expand">
+                <div class="tag-cloud">
+                    <div class="tag-cloud-title">
+                        目前共计&nbsp;{% get_tags_count %}&nbsp;个标签
+                    </div>
+                    <div class="tag-cloud-tags">
+                        {% for tag in tags_list %}
+                            <a href="{% url 'blog:tag' tag.name %}" post-num="{{ tag.num_posts }}"
+                               class="tags-cloud">{{ tag.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block toggle %}
+ <div class="sidebar-toggle">
+                <div class="sidebar-toggle-line-wrap">
+                    <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+                    <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+                    <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+                </div>
+            </div>
+{% endblock %}
+{% block script %}
+    <script type="text/javascript">
+        $(".tags-cloud").each(function () {
+            switch ($(this).attr("post-num")) {
+                case "0":
+                case "1":
+                    $(this).css("font-size", "12px");
+                    $(this).css("color", "#ccc");
+                    break;
+                case "2":
+                    $(this).css("font-size", "15px");
+                    $(this).css("color", "#adadad");
+                    break;
+                case "3":
+                    $(this).css("font-size", "18px");
+                    $(this).css("color", "#8e8e8e");
+                    break;
+                case "4":
+                    $(this).css("font-size", "21px");
+                    $(this).css("color", "#6f6f6f");
+                    break;
+                case "4":
+                    $(this).css("font-size", "24px");
+                    $(this).css("color", "#4f4f4f");
+                    break;
+                case "4":
+                    $(this).css("font-size", "27px");
+                    $(this).css("color", "#303030");
+                    break;
+                default:
+                    $(this).css("font-size", "30px");
+                    $(this).css("color", "#111");
+                    break;
+            }
+        });
+    </script>
+{% endblock %}

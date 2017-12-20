@@ -106,3 +106,28 @@ class BlogSet(models.Model):
     class Meta:
         verbose_name = '管理内容'
         verbose_name_plural = '站点管理'
+
+
+class Friendly(models.Model):
+    site_name = models.CharField(blank=False, verbose_name='站点名称', max_length=66)
+    link = models.CharField(blank=False, verbose_name='链接', max_length=200)
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+
+    def __str__(self):
+        return self.site_name
+
+    class Meta:
+        ordering = ['create_time', 'site_name']
+        verbose_name = '友情链接'
+        verbose_name_plural = '友情链接'
+
+
+class Catalog(models.Model):
+    index = models.IntegerField(blank=True, default=0, verbose_name='显示顺序')
+    name = models.CharField(blank=True, verbose_name='分类名称', max_length=20)
+    link = models.CharField(blank=False, verbose_name='分类链接', max_length=20)
+
+    class Meta:
+        ordering = ['index']
+        verbose_name = '目录'
+        verbose_name_plural = '目录'

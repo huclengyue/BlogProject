@@ -3,19 +3,19 @@
 from django import template
 from django.db.models.aggregates import Count
 
-from blog.models import Post, Category, Tag, BlogSet
+from blog.models import Post, Category, Tag, BlogSet, Friendly
 
 register = template.Library()
 
 
 @register.simple_tag()
 def get_recent_posts(num=5):
-    return Post.objects.all().order_by('-created_time')[:num]
+    return Post.objects.all()[:num]
 
 
 @register.simple_tag()
 def archives():
-    return Post.objects.dates("created_time", 'month', order="DESC")
+    return Post.objects.dates("created_time", 'year', order="DESC")
 
 
 # 分类模板
@@ -34,3 +34,18 @@ def get_tags():
 @register.simple_tag()
 def get_blog_set():
     return BlogSet.objects.first()
+
+
+@register.simple_tag()
+def get_friendly_link():
+    return Friendly.objects.all()
+
+
+@register.simple_tag()
+def get_post_count():
+    return Post.objects.count()
+
+
+@register.simple_tag()
+def get_tags_count():
+    return Tag.objects.count()
