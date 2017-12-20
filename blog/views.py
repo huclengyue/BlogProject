@@ -2,10 +2,10 @@
 import markdown
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
+from django.utils.text import slugify
 from django.views.generic import DetailView
 from django.views.generic import ListView
 from markdown.extensions.toc import TocExtension
-from django.utils.text import slugify
 
 from blog.models import Post, Category, Tag
 from comments.forms import CommentForm
@@ -35,7 +35,7 @@ def index(request):
 
 class IndexView(ListView):
     model = Post
-    template_name = 'blog/index.html'
+    template_name = 'blog/index2.html'
     context_object_name = 'post_list'
     paginate_by = 5
 
@@ -201,13 +201,13 @@ class PostDetailView(DetailView):
             'markdown.extensions.toc',
             TocExtension(slugify=slugify),
         ])
-        post.body = md.convert('[TOC]\r\n'+post.body)
+        post.body = md.convert('[TOC]\r\n' + post.body)
         # '[TOC]\r\n' +
         # body =
         # md.convert(body)
         post.toc = md.toc
-        print(post.body)
-        print(post.toc)
+        # 删除body上的目录
+        post.body = post.body[len(post.toc):len(post.body)]
         return post
 
     """

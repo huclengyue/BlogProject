@@ -86,6 +86,23 @@ class Post(models.Model):
         return self.created_time.strftime("%Y-%m-%d")
 
     get_simple_date.short_description = u"发布时间"
+    short_description = "文章列表"
 
     class Meta:
         ordering = ['-created_time', 'title']
+        verbose_name = '文章'
+        verbose_name_plural = '文章'
+
+
+class BlogSet(models.Model):
+    site_name = models.CharField(blank=False, verbose_name='站点名称', max_length=66)
+    description = models.TextField(blank=True, verbose_name='站点说明', max_length=150)
+    UserName = models.ForeignKey(User, verbose_name='作者', on_delete=models.CASCADE, blank=True, null=True)
+    userAvatar = models.ImageField(upload_to='blog_image/%Y/%m/%d', null=True, blank=True, verbose_name='用户头像')
+
+    def __str__(self):
+        return self.site_name
+
+    class Meta:
+        verbose_name = '管理内容'
+        verbose_name_plural = '站点管理'

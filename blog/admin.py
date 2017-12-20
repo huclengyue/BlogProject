@@ -23,9 +23,14 @@ class PostAdmin(admin.ModelAdmin):
     # )
 
 
+class BlogAdmin(admin.ModelAdmin):
+    list_display = ['site_name', 'UserName']
+
+
 # 把新增的 PostAdmin 也注册进来
 admin.site.register(Post, PostAdmin)
 admin.site.register(Category)
 admin.site.register(Tag)
+admin.site.register(BlogSet,BlogAdmin)
 admin.site.site_header = 'Blog后台管理系统'
 admin.site.site_title = 'By LengYue'

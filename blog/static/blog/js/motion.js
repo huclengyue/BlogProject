@@ -1,3 +1,5 @@
+/* global NexT: true */
+
 $(document).ready(function () {
   NexT.motion = {};
 
@@ -76,7 +78,7 @@ $(document).ready(function () {
   sidebarToggleLines.push(sidebarToggleLine3rd);
 
   var SIDEBAR_WIDTH = '320px';
-  var SIDEBAR_DISPLAY_DURATION = 150;
+  var SIDEBAR_DISPLAY_DURATION = 200;
 
   var sidebarToggleMotion = {
     toggleEl: $('.sidebar-toggle'),
@@ -127,7 +129,7 @@ $(document).ready(function () {
             $('.sidebar .motion-element').velocity(
               'transition.slideRightIn',
               {
-                stagger: 20,
+                stagger: 50,
                 drag: true,
                 complete: function () {
                   self.sidebarEl.trigger('sidebar.motion.complete');
@@ -194,7 +196,7 @@ $(document).ready(function () {
       $brand.size() > 0 && sequence.push({
         e: $brand,
         p: {opacity: 1},
-        o: {duration: 150}
+        o: {duration: 200}
       });
 
       NexT.utils.isMist() && hasElement([$logoLineTop, $logoLineBottom]) &&
@@ -206,13 +208,13 @@ $(document).ready(function () {
       hasElement($title) && sequence.push({
         e: $title,
         p: {opacity: 1, top: 0},
-        o: { duration: 150 }
+        o: { duration: 200 }
       });
 
       hasElement($subtitle) && sequence.push({
         e: $subtitle,
         p: {opacity: 1, top: 0},
-        o: {duration: 150}
+        o: {duration: 200}
       });
 
       if (sequence.length > 0) {
@@ -230,7 +232,7 @@ $(document).ready(function () {
           e: $(element),
           p: {translateX: translateX},
           o: {
-            duration: 300,
+            duration: 500,
             sequenceQueue: false
           }
         };
@@ -267,7 +269,7 @@ $(document).ready(function () {
 
       function postMotion () {
         var postMotionOptions = window.postMotionOptions || {
-            stagger: 10,
+            stagger: 100,
             drag: true
           };
         postMotionOptions.complete = function () {
@@ -279,7 +281,7 @@ $(document).ready(function () {
     },
 
     sidebar: function (integrator) {
-      if (CONFIG.sidebar === 'always') {
+      if (CONFIG.sidebar.display === 'always') {
         NexT.utils.displaySidebar();
       }
       integrator.next();
