@@ -14,13 +14,13 @@ def index(request):
     # 我们首先把 HTTP请求传了进去，然后render根据第二个参数的值index.html找到这个模板文件并读取模板中的内容。之后render
     # 根据我们传入的context参数的值把模板中的变量替换为我们传递的变量的值，{{title}}被替换成了context字典中title对应的值，同理
     # {{welcome}}也被替换成相应的值。
-    return render(request, "index2.html", context={"title": "我的博客首页", "welcome": "欢迎访问我的博客"})
+    return render(request, "search.html", context={"title": "我的博客首页", "welcome": "欢迎访问我的博客"})
 """
 
 """
 请使用下方真正的首页视图函数
 def index(request):
-    return render(request, 'blog/index2.html', context={
+    return render(request, 'blog/search.html', context={
         'title': '我的博客首页',
         'welcome': '欢迎访问我的博客首页'
     })
@@ -29,12 +29,12 @@ def index(request):
 
 def index(request):
     post_list = Post.objects.all()
-    return render(request, 'blog/index2.html', context={'post_list': post_list})
+    return render(request, 'blog/index.html', context={'post_list': post_list})
 
 
 class IndexView(ListView):
     model = Post
-    template_name = 'blog/index2.html'
+    template_name = 'blog/index.html'
     context_object_name = 'post_list'
     paginate_by = 5
 
@@ -202,7 +202,7 @@ class PostDetailView(DetailView):
 
     """
      在视图函数中将模板变量传递给模板是通过给 render 函数的 context 参数传递一个字典实现的，
-      例如 render(request, 'blog/index2.html', context={'post_list': post_list})，
+      例如 render(request, 'blog/search.html', context={'post_list': post_list})，
       这里传递了一个 {'ost_list': post_list} 字典给模板。
       在类视图中，这个需要传递的模板变量字典是通过 get_context_data 获得的，
       所以我们复写该方法，以便我们能够自己再插入一些我们自定义的模板变量进去。
@@ -223,12 +223,12 @@ class PostDetailView(DetailView):
 # 归档
 def archives(request, year, month):
     post_list = Post.objects.filter(created_time__year=year, created_time__month=month)
-    return render(request, 'blog/index2.html', context={'post_list': post_list})
+    return render(request, 'blog/index.html', context={'post_list': post_list})
 
 
 class ArchiveView(ListView):
     model = Post
-    template_name = 'blog/index2.html'
+    template_name = 'blog/index.html'
     context_object_name = 'post_list'
 
     def get_queryset(self):
@@ -253,12 +253,12 @@ get_object_or_404 函数和 detail 视图中一样，其作用是如果用户访
 def category(request, pk):
     cate = get_object_or_404(Category, pk=pk)
     post_list = Post.objects.filter(category=cate)
-    return render(request, 'blog/index2.html', context={'post_list': post_list})
+    return render(request, 'blog/index.html', context={'post_list': post_list})
 
 
 class CategoryView(ListView):
     model = Post
-    template_name = 'blog/index2.html'
+    template_name = 'blog/index.html'
     context_object_name = 'post_list'
 
     # 我们覆写了父类的 get_queryset 方法。该方法默认获取指定模型的全部列表数据。
@@ -270,7 +270,7 @@ class CategoryView(ListView):
 
 class CategoryViewByName(ListView):
     model = Post
-    template_name = 'blog/index2.html'
+    template_name = 'blog/index.html'
     context_object_name = 'post_list'
 
     def get_queryset(self):
@@ -280,7 +280,7 @@ class CategoryViewByName(ListView):
 
 class TagView(ListView):
     model = Post
-    template_name = 'blog/index2.html'
+    template_name = 'blog/index.html'
     context_object_name = 'post_list'
 
     def get_queryset(self):
@@ -311,6 +311,6 @@ def search(request):
     error_msg = ''
     if not q:
         error_msg = '请输入关键词'
-        return render(request, 'blog/index2.html', {'error_msg': error_msg})
+        return render(request, 'blog/index.html', {'error_msg': error_msg})
     post_list = Post.objects.filter(Q(title__icontains=q) | Q(body__icontains=q))
-    return render(request, 'blog/index2.html', {'error_msg': error_msg, 'post_list': post_list})
+    return render(request, 'blog/index.html', {'error_msg': error_msg, 'post_list': post_list})

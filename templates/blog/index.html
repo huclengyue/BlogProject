@@ -1,4 +1,4 @@
-{% extends 'base2.html' %}
+{% extends 'blog/base.html' %}
 {% load blog_tags %}
 {% get_blog_set as blog %}
 {% block title %}{{ blog.site_name }}{% endblock title %}
@@ -23,7 +23,7 @@
                                  <span class="post-meta-item-text">标签</span>
                                  <span itemprop="about" itemscope="" itemtype="https://schema.org/Thing">
                                       {% for tag in post.tags.all %}
-                                          <a href="{% url 'blog:tag' tag.pk %}">{{ tag.name }}</a>,
+                                          <a href="{% url 'blog:tag' tag.name %}">{{ tag.name }}</a>{% if not forloop.last %},{% endif %}
                                       {% endfor %}
                                  </span>
                              </span>

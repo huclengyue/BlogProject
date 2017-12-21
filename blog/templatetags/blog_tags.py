@@ -3,7 +3,7 @@
 from django import template
 from django.db.models.aggregates import Count
 
-from blog.models import Post, Category, Tag, BlogSet, Friendly
+from blog.models import Post, Category, Tag, BlogSet, Friendly, Catalog
 
 register = template.Library()
 
@@ -39,6 +39,11 @@ def get_blog_set():
 @register.simple_tag()
 def get_friendly_link():
     return Friendly.objects.all()
+
+
+@register.simple_tag()
+def get_catalog():
+    return Catalog.objects.all()
 
 
 @register.simple_tag()

@@ -60,43 +60,8 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-    </script>
-
-    <script type="text/javascript" src="/shared/ghost-url.min.js?v=5067868fc9"></script>
-    <script type="text/javascript">
-        ghost.init({
-            clientId: "ghost-frontend",
-            clientSecret: "95ca659e789d"
-        });
     </script>
     <link rel="alternate" type="application/rss+xml" title="{{ blog.site_name }}" href="{% url 'blog:index' %}rss/"/>
-    <!--<div id="site-config">
-{
-    "author_name": "LengYue's Blog",
-    "duoshuo_name": "lengyueblog",
-    "links": [
-    {
-        "name": "知乎",
-        "link": "https://www.zhihu.com/people/leng-yue-88-85"
-    },
-    {
-        "name": "Github",
-        "link": "https://github.com/huclengyue"
-    }
-    ]
-}
-</div> -->
     <script type="text/javascript" id="hexo.configuration">
         var NexT = window.NexT || {};
         var CONFIG = {
@@ -120,7 +85,7 @@
         <div class="header-inner">
             <div class="site-meta ">
                 <div class="custom-logo-site-title">
-                    <a href="http://www.apkdv.com" class="brand" rel="start">
+                    <a href="{% url 'blog:index' %}" class="brand" rel="start">
                         <span class="logo-line-before "><i class=""></i></span>
                         <span class="site-title">{{ blog.site_name }}</span>
                         <span class="logo-line-after"><i class=""></i></span>
@@ -136,44 +101,42 @@
             </div>
             <nav class="site-nav">
                 <ul id="menu" class="menu menu-left">
-                    <li class="menu-item menu-item-home nav- nav-current" role="presentation">
-                        <a href="{% url 'blog:index' %}" rel="section">
-                            <i class="menu-item-icon fa fa-home fa-fw"></i> <br>首页
-                        </a>
-                    </li>
-                    <li class="menu-item menu-item-home nav-android" role="presentation">
-                        <a href="{% url 'blog:index' %}tag/android/" rel="section">
-                            <i class="menu-item-icon fa fa-home fa-fw"></i> <br>Android
-                        </a>
-                    </li>
+                    {% get_catalog as catalog %}
+                    {% for cata in catalog %}
+                        <li class="menu-item menu-item-home nav- nav-current" role="presentation">
+                            <a href="{{ cata.link }}" rel="section">
+                                <i class="menu-item-icon fa fa-home fa-fw"></i> <br>{{ cata.name }}
+                            </a>
+                        </li>
+                    {% endfor %}
+
+
+
+
                     <li class="menu-item menu-item-home nav-" role="presentation">
                         <a href="{% url 'blog:index' %}tag/sui-yue-ru-ge/" rel="section">
                             <i class="menu-item-icon fa fa-home fa-fw"></i> <br>岁月如歌
                         </a>
                     </li>
-                    <li class="menu-item menu-item-home nav-" role="presentation">
-                        <a href="{% url 'blog:index' %}records/" rel="section">
-                            <i class="menu-item-icon fa fa-home fa-fw"></i> <br>归档
-                        </a>
-                    </li>
+
                     <li class="menu-item menu-item-home nav-tags" role="presentation">
                         <a href="{% url 'blog:index' %}tags/" rel="section">
                             <i class="menu-item-icon fa fa-home fa-fw"></i> <br>Tags
                         </a>
                     </li>
-                    <li class="menu-item menu-item-home nav-" role="presentation">
-                        <a href="http://resume.apkdv.com/" rel="section">
-                            <i class="menu-item-icon fa fa-home fa-fw"></i> <br>简历
-                        </a>
-                    </li>
-                    <li class="menu-item menu-item-search site-search">
+                    {#                    <li class="menu-item menu-item-home nav-" role="presentation">#}
+                    {#                        <a href="http://resume.apkdv.com/" rel="section">#}
+                    {#                            <i class="menu-item-icon fa fa-home fa-fw"></i> <br>简历#}
+                    {#                        </a>#}
+                    {#                    </li>#}
+                    <li class="menu-item menu-item-home nav-tags" role="presentation">
                         <form class="site-search-form">
-                            <input type="text" id="search-input" class="search-input default-search-input"
+                            <input type="text" name="q" id="search-input" class="search-input default-search-input"
                                    autocomplete="off" autocorrect="off" autocapitalize="off" style="
             background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcg…4LTUsNS01czUsMi4yMzgsNSw1cy0yLjIzOCw1LTUsNVMyLDkuNzYyLDIsN3oiLz48L3N2Zz4=') no-repeat 0 50%;
-            background-size: 12px 12px;
+            background-size: 1px 1px;
             border: none;
-            border-bottom: 1px solid #999;
+            border-bottom: 10px solid #999;
             outline: none;">
                         </form>
                     </li>
@@ -268,7 +231,7 @@
 <script>
     $("#search-input").keypress(function (key) {
         if (key.keyCode == 13) {
-            window.open("/search/?keyword=" + $(this).val(), "_blank");
+            window.open("/search/?q=" + $(this).val(), "_blank");
         }
 
     });
