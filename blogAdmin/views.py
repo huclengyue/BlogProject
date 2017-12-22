@@ -7,7 +7,8 @@ from django.shortcuts import render
 # Create your views here.
 
 def admin_index(request):
-    return render(request, 'admin/index.html')
+    if User.is_authenticated:
+        return render(request, 'admin/index.html')
 
 
 def admin_login(request):
@@ -25,4 +26,4 @@ def admin_login(request):
                 '''
     else:
         context = {'random': random.randint(1, 5)}
-        return render(request, 'admin/login.html', context=context)
+        return render(request, 'registration/login.html', context=context)
