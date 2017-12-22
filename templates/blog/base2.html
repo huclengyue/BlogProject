@@ -1,0 +1,278 @@
+{% load staticfiles %}
+{% load blog_tags %}
+<!DOCTYPE html>
+<html class="theme-next mist use-motion">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    {% get_blog_set as blog %}
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0">
+    <meta name="description" content="{{ blog.description }}">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ blog.site_name }}">
+    <meta property="og:url" content="http://www.apkdv.com">
+    <meta property="og:site_name" content="{{ blog.site_name }}">
+    <meta property="og:description" content="{{ blog.description }}">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{{ blog.site_name }}">
+    <meta name="twitter:description" content="{{ blog.description }}">
+    <title>{% block title %}{% endblock %}</title>
+
+    <!-- Style Sheet-->
+
+    <link rel="stylesheet" href="{% static 'blog/vendors/fancybox/jquery.fancybox.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/vendors/font-awesome/css/font-awesome.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'blog/css/main.css' %}" type="text/css">
+
+    <script type="text/javascript" src="{% static "blog/js/jquery.min.js" %}"></script>
+    <!-- End Style-->
+    <style type="text/css">.fancybox-margin {
+        margin-right: 15px;
+    }</style>
+
+    <link rel="canonical" href="{% url 'blog:index' %}"/>
+    <meta name="referrer" content="origin"/>
+    <link rel="next" href="{% url 'blog:index' %}page/2/"/>
+
+    <meta property="og:site_name" content="LengYue's Blog"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="{{ blog.site_name }}"/>
+    <meta property="og:description" content="{{ blog.description }}"/>
+    <meta property="og:url" content="{% url 'blog:index' %}"/>
+
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="{{ blog.site_name }}"/>
+    <meta name="twitter:description" content="{{ blog.description }}"/>
+    <meta name="twitter:url" content="{% url 'blog:index' %}"/>
+
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "publisher": "LengYue's Blog",
+    "url": "{% url 'blog:index' %}",
+    "description": "{{ blog.description }}"
+}
+
+
+
+
+
+
+
+
+
+
+    </script>
+    <link rel="alternate" type="application/rss+xml" title="{{ blog.site_name }}" href="{% url 'blog:index' %}rss/"/>
+    <script type="text/javascript" id="hexo.configuration">
+        var NexT = window.NexT || {};
+        var CONFIG = {
+            scheme: 'Mist',
+            sidebar: {"position": "right", "display": "post"},
+            fancybox: true,
+            motion: true //,
+            // duoshuo: {
+            //    userId: 4141040,
+            //    author: ''
+            //}
+        };
+    </script>
+
+</head>
+
+<body class="home-template">
+<div class="container one-collumn sidebar-position-left page-home">
+    <div class="headband"></div>
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+        <div class="header-inner">
+            <div class="site-meta ">
+                <div class="custom-logo-site-title">
+                    <a href="{% url 'blog:index' %}" class="brand" rel="start">
+                        <span class="logo-line-before "><i class=""></i></span>
+                        <span class="site-title">{{ blog.site_name }}</span>
+                        <span class="logo-line-after"><i class=""></i></span>
+                    </a>
+                </div>
+            </div>
+            <div class="site-nav-toggle">
+                <button>
+                    <span class="btn-bar"></span>
+                    <span class="btn-bar"></span>
+                    <span class="btn-bar"></span>
+                </button>
+            </div>
+            <nav class="site-nav">
+                <ul id="menu" class="menu menu-left">
+                    <li class="menu-item menu-item-home nav- nav-current" role="presentation">
+                        <a href="/" rel="section">
+                            <i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页
+                        </a>
+                    </li>
+                    <li class="menu-item menu-item-home nav- nav-current" role="presentation">
+                        <a href="/records/" rel="section">
+                            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档
+                        </a>
+                    </li>
+                    <li class="menu-item menu-item-home nav-" role="presentation">
+                        <a href="{% url 'blog:index' %}tag/sui-yue-ru-ge/" rel="section">
+                            <i class="menu-item-icon fa fa-home fa-fw"></i> <br>岁月如歌
+                        </a>
+                    </li>
+                    <li class="menu-item menu-item-home nav-tags" role="presentation">
+                        <a href="{% url 'blog:index' %}tags/" rel="section">
+                            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags
+                        </a>
+                    </li>
+                    {#                    <li class="menu-item menu-item-home nav-" role="presentation">#}
+                    {#                        <a href="http://resume.apkdv.com/" rel="section">#}
+                    {#                            <i class="menu-item-icon fa fa-home fa-fw"></i> <br>简历#}
+                    {#                        </a>#}
+                    {#                    </li>#}
+
+                    <li class="menu-item menu-item-search">
+                        <a href="javascript:;" class="popup-trigger">
+                            <i class="menu-item-icon fa fa-search fa-fw"></i> <br/>
+                            搜索
+                        </a>
+                    </li>
+                </ul>
+                <div class="site-search">
+                    <div class="algolia-popup popup search-popup">
+                        <div class="algolia-search">
+                            <div class="algolia-search-input-icon">
+                                <i class="fa fa-search"></i>
+                            </div>
+                            <div class="algolia-search-input" id="algolia-search-input"></div>
+                        </div>
+
+                        <div class="algolia-results">
+                            <div id="algolia-stats"></div>
+                            <div id="algolia-hits"></div>
+                            <div id="algolia-pagination" class="algolia-pagination"></div>
+                        </div>
+
+                        <span class="popup-btn-close">
+                                <i class="fa fa-times-circle"></i>
+                        </span>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <main id="main" class="main">
+        <div class="main-inner ">
+            {% block main %}
+            {% endblock main %}
+            {% block  toggle %}
+            {% endblock toggle %}
+ <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+            <aside id="sidebar" class="sidebar {% block sidebar %}{% endblock %}">
+                <div class="sidebar-inner">
+                    {% block post_select %}
+                    {% endblock post_select %}
+                    <section class="site-overview sidebar-panel" >
+                        <div class="site-author motion-element" itemprop="author" itemscope=""
+                             itemtype="http://schema.org/Person">
+                            <img class="site-author-image" itemprop="image"
+                                 src="https://dn-lengyue.qbox.me/image/f/43/8db24d7c39a7a04a1020fc7dd799d.png"
+                                 alt="{{ blog.site_name }}">
+                            <p class="site-author-name" itemprop="name">LengYue</p>
+                            <p class="site-description motion-element" itemprop="description">
+                                {{ blog.description }}</p>
+                        </div>
+                        <nav class="site-state motion-element">
+                            <div class="site-state-item site-state-posts">
+                                <a href="/records">
+                        <span class="site-state-item-count">
+                                {% get_post_count %}
+                        </span>
+                                    <span class="site-state-item-name">文章</span>
+                                </a>
+                            </div>
+                            <div class="site-state-item site-state-categories">
+                                <a href="/tags">
+                        <span class="site-state-item-count">
+                                {% get_tags_count %}
+                        </span>
+                                    <span class="site-state-item-name">标签</span>
+                                </a>
+                            </div>
+
+                        </nav>
+                        <div class="feed-link motion-element">
+                            <a href="{% url 'rss' %}" rel="alternate"><i class="fa fa-rss"></i>RSS</a>
+                        </div>
+                        <div class="links-of-author motion-element">
+                            <!--添加友情链接位置，每复制一个span并修改链接及内容即可-->
+                            {% get_friendly_link as friendly_link %}
+                            {% for link in friendly_link %}
+                                <span class="links-of-author-item">
+                                <a href="{{ link.link }}" target="_blank">{{ link.site_name }}</a></span>
+                            {% endfor %}
+                            <!--友链结束位置-->
+
+                        </div>
+                    </section>
+                    {% block select %}
+                    {% endblock select %}
+                </div>
+            </aside>
+            {% block script %}
+            {% endblock %}
+        </div>
+    </main>
+
+    <footer id="footer" class="footer">
+        <div class="footer-inner">
+
+            <div class="powered-by">
+                Powered&nbsp;by&nbsp;<a class="theme-link" href="http://ghost.org">Ghost</a>
+                <div class="ghost-footer" style="display:inline-block;">
+                    <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+                    document.write(unescape("%3Cspan id='cnzz_stat_icon_1256437202'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1256437202%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+    <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+    </div>
+</div>
+
+<script>
+    $("#search-input").keypress(function (key) {
+        if (key.keyCode == 13) {
+            window.open("/search/?q=" + $(this).val(), "_blank");
+        }
+
+    });
+</script>
+<script type="text/javascript" src="{% static 'blog/vendors/velocity/velocity.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'blog/vendors/velocity/velocity.ui.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'blog/vendors/fastclick/lib/fastclick.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'blog/vendors/jquery_lazyload/jquery.lazyload.js' %}"></script>
+<script type="text/javascript" src="{% static 'blog/vendors/fancybox/jquery.fancybox.pack.js' %}"></script>
+<script type="text/javascript" src="{% static 'blog/vendors/ua-parser-js/ua-parser.pack.js' %}"></script>
+<script type="text/javascript" src="{% static 'blog/js/motion.js' %}"></script>
+<script type="text/javascript" src="{% static 'blog/js/utils.js' %}"></script>
+<script type="text/javascript" src="{% static 'blog/js/affix.js' %}"></script>
+<script type="text/javascript" src="{% static 'blog/js/post-details.js' %}"></script>
+<script type="text/javascript" src="{% static 'blog/js/scrollspy.js' %}"></script>
+<script type="text/javascript" src="{% static 'blog/js/bootstrap.js' %}"></script>
+
+
+</body>
+</html>
