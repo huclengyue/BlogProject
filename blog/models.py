@@ -1,7 +1,8 @@
 # coding: utf-8
 
 import markdown
-from django.contrib.auth.models import User
+from django.conf import settings
+
 from django.db import models
 # 分类
 from django.urls import reverse
@@ -47,7 +48,7 @@ class Post(models.Model):
     # django.contrib.auth 是 Django 内置的应用，专门用于处理网站用户的注册、登录等流程，User 是 Django 为我们已经写好的用户模型。
     # 这里我们通过 ForeignKey 把文章和 User 关联了起来。
     # 因为我们规定一篇文章只能有一个作者，而一个作者可能会写多篇文章，因此这是一对多的关联关系，和 Category 类似。
-    author = models.ForeignKey(User, verbose_name='作者'
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='作者'
                                , on_delete=models.CASCADE, blank=True, null=True)
     # 阅读量
     views = models.PositiveIntegerField(default=0, editable=False)
@@ -97,7 +98,7 @@ class Post(models.Model):
 class BlogSet(models.Model):
     site_name = models.CharField(blank=False, verbose_name='站点名称', max_length=66)
     description = models.TextField(blank=True, verbose_name='站点说明', max_length=150)
-    UserName = models.ForeignKey(User, verbose_name='作者', on_delete=models.CASCADE, blank=True, null=True)
+    UserName = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='作者', on_delete=models.CASCADE, blank=True, null=True)
     userAvatar = models.ImageField(upload_to='blog_image/%Y/%m/%d', null=True, blank=True, verbose_name='用户头像')
 
     def __str__(self):

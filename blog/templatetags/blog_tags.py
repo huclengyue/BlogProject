@@ -4,6 +4,7 @@ from django import template
 from django.db.models.aggregates import Count
 
 from blog.models import Post, Category, Tag, BlogSet, Friendly, Catalog
+from comments.models import Comment
 
 register = template.Library()
 
@@ -11,6 +12,11 @@ register = template.Library()
 @register.simple_tag()
 def get_recent_posts(num=5):
     return Post.objects.all()[:num]
+
+
+@register.simple_tag()
+def get_recent_comment(num=5):
+    return Comment.objects.all().order_by('-created_time')[:num]
 
 
 @register.simple_tag()

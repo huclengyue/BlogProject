@@ -35,7 +35,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog', 'comments', 'admin', 'haystack',
+    'blog',
+    'comments',
+    'blogAdmin',
+    'haystack',
 ]
 
 MIDDLEWARE = [
@@ -101,7 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -129,3 +132,6 @@ QINIU_BUCKET_NAME = 'lengyue'
 QINIU_BUCKET_DOMAIN = 'dn-lengyue.qbox.me/'
 
 QINIU_SECURE_URL = True  # 使用ht
+
+# 其它设置 登录
+AUTH_USER_MODEL = 'blogAdmin.User'

@@ -1,3 +1,4 @@
+
 /* global NexT: true */
 
 $(document).ready(function () {
@@ -156,8 +157,8 @@ $(document).ready(function () {
       this.sidebarEl.removeClass('sidebar-active');
       this.sidebarEl.trigger('sidebar.isHiding');
 
-      //在 post 页面下按下隐藏 sidebar 时如果当前选中的是“站点概览”，将 toc 去除 motion 效果
-      //防止再次打开时会出现在“站点概览”下的 bug
+      //鍦� post 椤甸潰涓嬫寜涓嬮殣钘� sidebar 鏃跺鏋滃綋鍓嶉€変腑鐨勬槸鈥滅珯鐐规瑙堚€濓紝灏� toc 鍘婚櫎 motion 鏁堟灉
+      //闃叉鍐嶆鎵撳紑鏃朵細鍑虹幇鍦ㄢ€滅珯鐐规瑙堚€濅笅鐨� bug
       if (!!$('.post-toc-wrap')) {
         if ($('.site-overview').css('display') === 'block') {
           $('.post-toc-wrap').removeClass('motion-element');

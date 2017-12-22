@@ -21,10 +21,12 @@ from blog.feeds import AllPostsRssFeed
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'', include('blog.urls')),
+    url(r'^xadmin/', include('blogAdmin.urls')),
     url(r'', include('comments.urls')),
     # 记得在顶部引入 AllPostsRssFeed
     url(r'^all/rss/$', AllPostsRssFeed(), name='rss'),
     # search
     url(r'^search/', include('haystack.urls')),
-
+    # 登录模块
+    url(r'^users/', include('django.contrib.auth.urls')),
 ]

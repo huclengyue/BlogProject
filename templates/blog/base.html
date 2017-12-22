@@ -60,6 +60,13 @@
 
 
 
+
+
+
+
+
+
+
     </script>
     <link rel="alternate" type="application/rss+xml" title="{{ blog.site_name }}" href="{% url 'blog:index' %}rss/"/>
     <script type="text/javascript" id="hexo.configuration">
@@ -101,27 +108,24 @@
             </div>
             <nav class="site-nav">
                 <ul id="menu" class="menu menu-left">
-                    {% get_catalog as catalog %}
-                    {% for cata in catalog %}
-                        <li class="menu-item menu-item-home nav- nav-current" role="presentation">
-                            <a href="{{ cata.link }}" rel="section">
-                                <i class="menu-item-icon fa fa-home fa-fw"></i> <br>{{ cata.name }}
-                            </a>
-                        </li>
-                    {% endfor %}
-
-
-
-
+                    <li class="menu-item menu-item-home nav- nav-current" role="presentation">
+                        <a href="/" rel="section">
+                            <i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页
+                        </a>
+                    </li>
+                    <li class="menu-item menu-item-home nav- nav-current" role="presentation">
+                        <a href="/records/" rel="section">
+                            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档
+                        </a>
+                    </li>
                     <li class="menu-item menu-item-home nav-" role="presentation">
                         <a href="{% url 'blog:index' %}tag/sui-yue-ru-ge/" rel="section">
                             <i class="menu-item-icon fa fa-home fa-fw"></i> <br>岁月如歌
                         </a>
                     </li>
-
                     <li class="menu-item menu-item-home nav-tags" role="presentation">
                         <a href="{% url 'blog:index' %}tags/" rel="section">
-                            <i class="menu-item-icon fa fa-home fa-fw"></i> <br>Tags
+                            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags
                         </a>
                     </li>
                     {#                    <li class="menu-item menu-item-home nav-" role="presentation">#}
@@ -129,19 +133,34 @@
                     {#                            <i class="menu-item-icon fa fa-home fa-fw"></i> <br>简历#}
                     {#                        </a>#}
                     {#                    </li>#}
-                    <li class="menu-item menu-item-home nav-tags" role="presentation">
-                        <form class="site-search-form">
-                            <input type="text" name="q" id="search-input" class="search-input default-search-input"
-                                   autocomplete="off" autocorrect="off" autocapitalize="off" style="
-            background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcg…4LTUsNS01czUsMi4yMzgsNSw1cy0yLjIzOCw1LTUsNVMyLDkuNzYyLDIsN3oiLz48L3N2Zz4=') no-repeat 0 50%;
-            background-size: 1px 1px;
-            border: none;
-            border-bottom: 10px solid #999;
-            outline: none;">
-                        </form>
-                    </li>
 
+                    <li class="menu-item menu-item-search">
+                        <a href="javascript:;" class="popup-trigger">
+                            <i class="menu-item-icon fa fa-search fa-fw"></i> <br/>
+                            搜索
+                        </a>
+                    </li>
                 </ul>
+                <div class="site-search">
+                    <div class="algolia-popup popup search-popup">
+                        <div class="algolia-search">
+                            <div class="algolia-search-input-icon">
+                                <i class="fa fa-search"></i>
+                            </div>
+                            <div class="algolia-search-input" id="algolia-search-input"></div>
+                        </div>
+
+                        <div class="algolia-results">
+                            <div id="algolia-stats"></div>
+                            <div id="algolia-hits"></div>
+                            <div id="algolia-pagination" class="algolia-pagination"></div>
+                        </div>
+
+                        <span class="popup-btn-close">
+                                <i class="fa fa-times-circle"></i>
+                        </span>
+                    </div>
+                </div>
             </nav>
         </div>
     </header>
@@ -155,7 +174,7 @@
                 <div class="sidebar-inner">
                     {% block post_select %}
                     {% endblock post_select %}
-                    <section class="site-overview sidebar-panel" style="display: block;">
+                    <section class="site-overview sidebar-panel sidebar-panel-active" >
                         <div class="site-author motion-element" itemprop="author" itemscope=""
                              itemtype="http://schema.org/Person">
                             <img class="site-author-image" itemprop="image"
@@ -188,9 +207,6 @@
                             <a href="{% url 'rss' %}" rel="alternate"><i class="fa fa-rss"></i>RSS</a>
                         </div>
                         <div class="links-of-author motion-element">
-                        </div>
-                        <div class="links-of-author motion-element">
-                            <p class="site-author-name">友情链接</p>
                             <!--添加友情链接位置，每复制一个span并修改链接及内容即可-->
                             {% get_friendly_link as friendly_link %}
                             {% for link in friendly_link %}

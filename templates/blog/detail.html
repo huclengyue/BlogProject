@@ -29,14 +29,14 @@
                                         {% endfor %}
                                 </span>
                             </span>
-{#                            <span class="post-comments-count">&nbsp; | &nbsp;#}
-{#                                <a href="#comments" itemprop="discussionUrl">#}
-{#                                    <span class="post-comments-count ds-thread-count" data-thread-key=""#}
-{#                                          itemprop="commentsCount"></span>#}
-{#                                </a>#}
-{#                            </span>#}
+                            {#                            <span class="post-comments-count">&nbsp; | &nbsp;#}
+                            {#                                <a href="#comments" itemprop="discussionUrl">#}
+                            {#                                    <span class="post-comments-count ds-thread-count" data-thread-key=""#}
+                            {#                                          itemprop="commentsCount"></span>#}
+                            {#                                </a>#}
+                            {#                            </span>#}
 
-             <span class="leancloud_visitors">
+                            <span class="leancloud_visitors">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -70,14 +70,12 @@
     </ul>
 {% endblock post_select %}
 {% block select %}
-    <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-        <div class="post-toc">
-            <div class="post-toc-content">
-                <ol class="nav" id="category_nav">
-                </ol>
+     <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+            <div class="post-toc">
+                <div class="post-toc-content"><ol class="nav" id="category_nav">
+                </ol></div>
             </div>
-        </div>
-    </section>
+        </section>
 {% endblock %}
 {#{% block toc %}#}
 {#    <div class="widget widget-content">#}

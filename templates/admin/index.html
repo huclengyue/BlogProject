@@ -1,0 +1,120 @@
+{% if user.is_authenticated %}
+{% endif %}
+{% load staticfiles %}
+{% load blog_tags %}
+{% load admin_tags %}
+{% include 'admin/header.html' %}
+
+{% block title %}管理中心{% endblock %}
+<div class="row">
+    <div class="col-sm-12">
+        <h4 class="page-title">Tale仪表盘</h4>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6 col-lg-3">
+            <div class="mini-stat clearfix bx-shadow bg-info">
+                <span class="mini-stat-icon"><i class="fa fa-quote-right" aria-hidden="true"></i></span>
+                <div class="mini-stat-info text-right">
+                    发表了<span class="counter">{% get_post_count %}</span>篇文章
+                </div>
+            </div>
+        </div>
+        {#        <div class="col-sm-6 col-lg-3">#}
+        {#            <div class="mini-stat clearfix bg-purple bx-shadow">#}
+        {#                <span class="mini-stat-icon"><i class="fa fa-comments-o" aria-hidden="true"></i></span>#}
+        {#                <div class="mini-stat-info text-right">#}
+        {#                    收到了<span class="counter">${statistics.comments}</span>条留言#}
+        {#                </div>#}
+        {#            </div>#}
+        {#        </div>#}
+
+        <div class="col-sm-6 col-lg-3">
+            <div class="mini-stat clearfix bg-success bx-shadow">
+                <span class="mini-stat-icon"><i class="fa fa-cloud-upload" aria-hidden="true"></i></span>
+                <div class="mini-stat-info text-right">
+                    上传了<span class="counter">${statistics.attachs}</span>个附件
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+            <div class="mini-stat clearfix bg-primary bx-shadow">
+                <span class="mini-stat-icon"><i class="fa fa-link" aria-hidden="true"></i></span>
+                <div class="mini-stat-info text-right">
+                    友链了<span class="counter">{% get_friendly_link_count %}</span>个好友
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">最新文章</h4>
+                </div>
+                <div class="panel-body">
+                    {% get_recent_posts as recent_post_list %}
+                    <ul class="list-group">
+
+                        {% for post in recent_post_list %}
+                            <li class="list-group-item">
+                            <span class="badge badge-primary"
+                                  title="{{ post.comment_set.count }}条评论">{{ post.comment_set.count }}</span>
+                                <a target="_blank" href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                            </li>
+                        {% empty %}
+                            暂无文章
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">最新留言</h4>
+                </div>
+                <div class="panel-body">
+                    {% get_recent_comment as comments %}
+                    {% if comments|length_is:'0' %}
+                        <div class="alert alert-warning">
+                            还没有收到留言.
+                        </div>
+                    {% else %}
+                        <ul class="list-group">
+                            {% for comment in comments %}
+                                <li class="list-group-item">
+                                    {{ comment.name }}于{{ comment.created_time|date:"Y-m-d" }}<a
+                                        href="{{ comment.post.get_absolute_url }}"
+                                        target="_blank">{{ comment.text }}</a>
+                                </li>
+
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+{#        <div class="col-md-4">#}
+{#            <div class="panel panel-default">#}
+{#                <div class="panel-heading">#}
+{#                    <h4 class="panel-title">系统日志</h4>#}
+{#                </div>#}
+{#                <div class="panel-body">#}
+{#                    <ul class="list-group">#}
+{#                        #for(log : logs)#}
+{#                        <li class="list-group-item">#}
+{#                            <span>${fmtdate(log.created, 'yyyy-MM-dd HH:mm:ss')} => ${log.action}</span>#}
+{#                        </li>#}
+{#                        #end#}
+{#                    </ul>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+    </div>
+</div>
+{% include 'admin/footer.html' %}
+</body>
+</html>
