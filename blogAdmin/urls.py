@@ -10,6 +10,9 @@ urlpatterns = [
     url(r'^$', views.admin_index, name="index"),
     # url(r'^$', views.admin_login, name="login"),
     url(r'^login/$', views.admin_login, name="login"),
+    url(r'^article/$', views.AdminPost.as_view(), name="article_list"),
+    url(r'^article/(?P<pk>[0-9]+)/$', views.PostDetailView.as_view(), name="article_edit"),
+    url(r'^article/delete/(?P<pk>[0-9]+)/$', views.admin_delete, name="article_delete"),
     # url(r'^search/$', views.search, name="search"),
 
 ]

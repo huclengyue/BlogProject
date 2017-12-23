@@ -135,3 +135,7 @@ QINIU_SECURE_URL = True  # 使用ht
 
 # 其它设置 登录
 AUTH_USER_MODEL = 'blogAdmin.User'
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/xadmin'
+LOGIN_URL = '/xadmin/login/'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
