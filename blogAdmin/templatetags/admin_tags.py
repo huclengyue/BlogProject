@@ -16,3 +16,12 @@ def get_friendly_link_count():
 @register.simple_tag()
 def get_all_category():
     return Category.objects.all()
+
+
+# 当前是否激活
+@register.simple_tag()
+def get_is_active(url, active):
+    if url == active:
+        return 'active'
+    else:
+        return 'normal'

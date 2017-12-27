@@ -50,6 +50,8 @@ class Post(models.Model):
     # 因为我们规定一篇文章只能有一个作者，而一个作者可能会写多篇文章，因此这是一对多的关联关系，和 Category 类似。
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='作者'
                                , on_delete=models.CASCADE, blank=True, null=True)
+    # 内容格式化方式
+    fmtType = models.CharField(max_length=20, verbose_name='格式化类型', default='markdown')
     # 阅读量
     views = models.PositiveIntegerField(default=0, editable=False)
 
@@ -98,7 +100,8 @@ class Post(models.Model):
 class BlogSet(models.Model):
     site_name = models.CharField(blank=False, verbose_name='站点名称', max_length=66)
     description = models.TextField(blank=True, verbose_name='站点说明', max_length=150)
-    UserName = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='作者', on_delete=models.CASCADE, blank=True, null=True)
+    UserName = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='作者', on_delete=models.CASCADE, blank=True,
+                                 null=True)
     userAvatar = models.ImageField(upload_to='blog_image/%Y/%m/%d', null=True, blank=True, verbose_name='用户头像')
 
     def __str__(self):
@@ -112,13 +115,13 @@ class BlogSet(models.Model):
 class Friendly(models.Model):
     site_name = models.CharField(blank=False, verbose_name='站点名称', max_length=66)
     link = models.CharField(blank=False, verbose_name='链接', max_length=200)
-    create_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    sort = models.IntegerField(blank=True, default=0, verbose_name='显示顺序')
 
     def __str__(self):
         return self.site_name
 
     class Meta:
-        ordering = ['create_time', 'site_name']
+        ordering = ['sort', 'site_name']
         verbose_name = '友情链接'
         verbose_name_plural = '友情链接'
 

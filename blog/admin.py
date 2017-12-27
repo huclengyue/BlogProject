@@ -29,8 +29,8 @@ class BlogAdmin(admin.ModelAdmin):
 
 
 class FriendlyAdmin(admin.ModelAdmin):
-    list_display = ['site_name', 'link']
-    fields = (('site_name', 'link'),)
+    list_display = ['site_name', 'link', 'sort']
+    fields = (('site_name', 'link', 'sort'),)
 
 
 class CatalogAdmin(admin.ModelAdmin):
