@@ -25,7 +25,7 @@ class PostAdmin(admin.ModelAdmin):
 
 
 class BlogAdmin(admin.ModelAdmin):
-    list_display = ['site_name', 'UserName']
+    list_display = ['site_name', 'description']
 
 
 class FriendlyAdmin(admin.ModelAdmin):

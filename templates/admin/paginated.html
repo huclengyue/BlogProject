@@ -1,0 +1,27 @@
+{% if is_paginated %}
+    <ul class="pagination m-b-5 pull-right">
+        {% if page_obj.has_previous %}
+            <li>
+                <a href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                    <i class="fa fa-angle-left"></i>&nbsp;上一页
+                </a>
+            </li>
+        {% endif %}
+        {% for nav in paginator.page_range %}
+            {% ifequal nav page_obj.number %}
+                <li class="active">
+            {% else %}
+                <li>{% endifequal %}
+        <a href="?page={{ nav }}">{{ nav }}</a></li></li>
+
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <li>
+                <a href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                    下一页&nbsp;<i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        {% endif %}
+        <li><span>共{{ paginator.num_pages }}页</span></li>
+    </ul>
+{% endif %}

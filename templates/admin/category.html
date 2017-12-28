@@ -1,4 +1,5 @@
-#include('./header.html',{has_sub:'other', active:'category', title:'分类管理'})
+{% include 'admin/header.html' with title="分类管理" %}
+{% load admin_tags %}
 <div class="row">
     <div class="col-sm-12">
         <h4 class="page-title">分类/标签管理</h4>
@@ -9,24 +10,29 @@
                 <h1 class="panel-title">分类列表</h1>
             </div>
             <div class="panel-body">
-                #for(c : categories)
-                <div class="btn-group m-b-10">
-                    #if(c.name == '默认分类')
-                    <button type="button" class="btn btn-${rand_color()} waves-effect waves-light">${c.name}
-                        (${c.count})
-                    </button>
-                    #else
-                    <button type="button" class="btn btn-${rand_color()} dropdown-toggle waves-effect waves-light"
-                            data-toggle="dropdown" aria-expanded="false">${c.name} (${c.count}) <span
-                            class="caret"></span></button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="javascript:void(0)" mid="${c.mid}" cname="${c.name}" class="edit-category">修改</a>
-                        </li>
-                        <li><a href="javascript:void(0)" mid="${c.mid}" class="del-category">删除</a></li>
-                    </ul>
-                    #end
-                </div>
-                #end
+                {% get__all_categories as cate_list %}
+                {% for cate in cate_list %}
+                    <div class="btn-group m-b-10">
+                        {% if cate.name == '默认分类' %}
+                            <button type="button"
+                                    class="btn btn-{% get_random_color %} waves-effect waves-light">{{ cate.name }}
+                                ({{ cate.num_posts }})
+                            </button>
+                        {% else %}
+                            <button type="button"
+                                    class="btn btn-{% get_random_color %} dropdown-toggle waves-effect waves-light"
+                                    data-toggle="dropdown" aria-expanded="false">{{ cate.name }} ({{ cate.num_posts }})
+                                <span
+                                        class="caret"></span></button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="javascript:void(0)" mid="{{ cate.pk }}" cname="{{ cate.name }}"
+                                       class="edit-category">修改</a>
+                                </li>
+                                <li><a href="javascript:void(0)" mid="{{ cate.pk }}" class="del-category">删除</a></li>
+                            </ul>
+                        {% endif %}
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -37,16 +43,18 @@
                 <h1 class="panel-title">标签列表</h1>
             </div>
             <div class="panel-body">
-                #for(c : tags)
-                <div class="btn-group m-b-10">
-                    <button type="button" class="btn btn-${rand_color()} dropdown-toggle waves-effect waves-light"
-                            data-toggle="dropdown" aria-expanded="false">${c.name} (${c.count}) <span
-                            class="caret"></span></button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="javascript:void(0)" mid="${c.mid}" class="del-category">删除</a></li>
-                    </ul>
-                </div>
-                #end
+                {% get_all_tags as tag_list %}
+                {% for tag in tag_list %}
+                    <div class="btn-group m-b-10">
+                        <button type="button"
+                                class="btn btn-{% get_random_color %} dropdown-toggle waves-effect waves-light"
+                                data-toggle="dropdown" aria-expanded="false">{{ tag.name }} ({{ tag.num_posts }}) <span
+                                class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="javascript:void(0)" mid="{{ tag.pk }}" class="del-tag">删除</a></li>
+                        </ul>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -67,7 +75,7 @@
         </div>
     </div>
 </div>
-#include('./footer.html')
+{% include 'admin/footer.html' %}
 <script type="text/javascript">
 
     var tale = new $.tale();
@@ -77,12 +85,12 @@
         var mid = $('#cform #mid').val();
         if (cname && cname != '') {
             tale.post({
-                url : '/admin/category/save',
-                data: {mid: mid, cname: cname},
+                url: '/xadmin/category/save/',
+                data: {mid: mid, cname: cname, csrfmiddlewaretoken: '{{ csrf_token }}'},
                 success: function (result) {
                     $('#cform #mid').val('');
                     $('#cform #cname').val('');
-                    if(result && result.success){
+                    if (result && result.success) {
                         tale.alertOkAndReload('分类保存成功');
                     } else {
                         tale.alertError(result.msg || '分类保存失败');
@@ -102,13 +110,32 @@
     $('.del-category').click(function () {
         var mid = $(this).attr('mid');
         tale.alertConfirm({
-            title:'确定删除该项吗?',
+            title: '确定删除该项吗?',
             then: function () {
                 tale.post({
-                    url : '/admin/category/delete',
-                    data: {mid: mid},
+                    url: '/xadmin/category/delete/',
+                    data: {mid: mid, csrfmiddlewaretoken: '{{ csrf_token }}'},
                     success: function (result) {
-                        if(result && result.success){
+                        if (result && result.success) {
+                            tale.alertOkAndReload('删除成功');
+                        } else {
+                            tale.alertError(result.msg || '删除失败');
+                        }
+                    }
+                });
+            }
+        });
+    });
+    $('.del-tag').click(function () {
+        var mid = $(this).attr('mid');
+        tale.alertConfirm({
+            title: '确定删除该项吗?',
+            then: function () {
+                tale.post({
+                    url: '/xadmin/tag/delete/',
+                    data: {mid: mid, csrfmiddlewaretoken: '{{ csrf_token }}'},
+                    success: function (result) {
+                        if (result && result.success) {
                             tale.alertOkAndReload('删除成功');
                         } else {
                             tale.alertError(result.msg || '删除失败');

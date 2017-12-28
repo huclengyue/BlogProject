@@ -55,7 +55,6 @@ class Post(models.Model):
     # 阅读量
     views = models.PositiveIntegerField(default=0, editable=False)
 
-    image = models.ImageField(upload_to='blog_image/%Y/%m/%d', null=True, blank=True, verbose_name='上传图片')
 
     def __str__(self):
         return self.title
@@ -99,10 +98,8 @@ class Post(models.Model):
 
 class BlogSet(models.Model):
     site_name = models.CharField(blank=False, verbose_name='站点名称', max_length=66)
-    description = models.TextField(blank=True, verbose_name='站点说明', max_length=150)
-    UserName = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='作者', on_delete=models.CASCADE, blank=True,
-                                 null=True)
-    userAvatar = models.ImageField(upload_to='blog_image/%Y/%m/%d', null=True, blank=True, verbose_name='用户头像')
+    description = models.TextField(blank=True, verbose_name='站点描述', max_length=150)
+    keywords = models.TextField(blank=True, verbose_name='站点关键词', max_length=150)
 
     def __str__(self):
         return self.site_name

@@ -16,7 +16,7 @@
                 <th width="15%">发布时间</th>
                 <th>浏览量</th>
                 <th>所属分类</th>
-{#                <th width="8%">发布状态</th>#}
+                {#                <th width="8%">发布状态</th>#}
                 <th>操作</th>
             </tr>
             </thead>
@@ -24,18 +24,18 @@
             {% for post in post_list %}
                 <tr cid="{{ post.pk }}">
                     <td>
-                        <a href="{% url 'blogAdmin:article_edit' post.pk %}">{{post.title}}</a>
+                        <a href="{% url 'blogAdmin:article_edit' post.pk %}">{{ post.title }}</a>
                     </td>
                     <td>{{ post.created_time }}</td>
                     <td>{{ post.views }}</td>
                     <td>{{ post.category }}</td>
-{#                                        <td>#}
-{#                                            #if(post.status == 'publish')#}
-{#                                            <span class="label label-success">已发布</span>#}
-{#                                            #elseif(post.status == 'draft')#}
-{#                                            <span class="label label-default">草稿</span>#}
-{#                                            #end#}
-{#                                        </td>#}
+                    {#                                        <td>#}
+                    {#                                            #if(post.status == 'publish')#}
+                    {#                                            <span class="label label-success">已发布</span>#}
+                    {#                                            #elseif(post.status == 'draft')#}
+                    {#                                            <span class="label label-default">草稿</span>#}
+                    {#                                            #end#}
+                    {#                                        </td>#}
                     <td>
                         <a href="{% url 'blogAdmin:article_edit' post.pk %}"
                            class="btn btn-primary btn-sm waves-effect waves-light m-b-5"><i
@@ -53,20 +53,8 @@
             {% endfor %}
             </tbody>
         </table>
-       {#  简单分页效果#}
-            {% if is_paginated %}
-                <nav class="pagination pull-right">
-                    {% if page_obj.has_previous %}
-                        <a href="?page={{ page_obj.previous_page_number }}">上一页</a>
-                    {% endif %}
-                    <!-- 显示当前页面信息 -->
-                    <span class="current">第 {{ page_obj.number }} 页 / 共 {{ paginator.num_pages }} 页</span>
-                    {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}">下一页</a>
-                    {% endif %}
-                </nav>
-            {% endif %}
-{#        #call pageAdminNav(articles)#}
+        {#  简单分页效果#}
+        {% include 'admin/paginated.html' %}
     </div>
 </div>
 
@@ -80,7 +68,7 @@
             title: '确定删除该文章吗?',
             then: function () {
                 tale.post({
-                    url: '/admin/article/delete',
+                    url: '/xadmin/article/delete',
                     data: {cid: cid},
                     success: function (result) {
                         if (result && result.success) {

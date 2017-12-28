@@ -9,3 +9,14 @@ def get_success():
 
 def get_failure():
     return json.dumps({"code": -1, "success": False})
+
+
+def get_failure_with_msg(msg):
+    return json.dumps({'msg': msg, "code": -1, "success": False})
+
+
+def isEmpty(string):
+    if string == '' and string != 'None':
+        return True
+    else:
+        return False

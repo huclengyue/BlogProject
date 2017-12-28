@@ -6,7 +6,9 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
+from django.views.generic import ListView, DetailView
 
+from BlogProject import settings
 from blog.models import Post, Tag, Category
 from blogAdmin import utils
 
@@ -52,6 +54,7 @@ def article_create(request):
                 return HttpResponse(utils.get_failure(), content_type="application/json")
 
 
+@login_required
 def save_post_tag(tags, post):
     # tag 整理
     if tags.strip():
@@ -62,6 +65,7 @@ def save_post_tag(tags, post):
             post.save()
 
 
+@login_required
 def save_post_categories(categories, post):
     if categories.strip():
         cate_list = categories.split(",")
@@ -69,3 +73,38 @@ def save_post_categories(categories, post):
             post_cate = Category.objects.get_or_create(name=cate)
             post.category = post_cate[0]
             post.save()
+
+
+@login_required
+def admin_delete(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if post is None:
+        return HttpResponse(utils.get_failure_with_msg("文章不存在"), content_type="application/json")
+    else:
+        post.delete()
+        return HttpResponse(utils.get_success(), content_type="application/json")
+
+
+class LoginRequiredMixin(object):
+    """
+    登陆限定，并指定登陆url
+    """
+
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super(LoginRequiredMixin, cls).as_view(**initkwargs)
+        return login_required(view, login_url=settings.LOGIN_URL)
+
+
+# @login_required
+class AdminPost(LoginRequiredMixin, ListView):
+    model = Post
+    template_name = 'admin/article_list.html'
+    context_object_name = 'post_list'
+    paginate_by = 20
+
+
+class PostDetailView(LoginRequiredMixin, DetailView):
+    model = Post
+    template_name = 'admin/article_edit.html'
+    context_object_name = 'post'
