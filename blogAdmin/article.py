@@ -9,7 +9,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
 
 from BlogProject import settings
-from blog.models import Post, Tag, Category
+from blog.models import Post, Category, Tag
 from blogAdmin import utils
 
 
@@ -28,15 +28,15 @@ def article_create(request):
         tags = request.POST['tags']
         categories = request.POST['categories']
         if not pk.strip():
-            try:
-                post = Post.objects.create(title=title, body=content)
-                # tag 整理
-                save_post_tag(tags, post)
-                # 分类
-                save_post_categories(categories, post)
-                return HttpResponse(utils.get_success(), content_type="application/json")
-            except:
-                return HttpResponse(utils.get_failure(), content_type="application/json")
+            # try:
+            post = Post.objects.create(title=title, body=content)
+            # tag 整理
+            save_post_tag(tags, post)
+            # 分类
+            save_post_categories(categories, post)
+            return HttpResponse(utils.get_success(), content_type="application/json")
+        # except:
+        #     return HttpResponse(utils.get_failure(), content_type="application/json")
         else:
             try:
                 post = get_object_or_404(Post, pk=pk)
@@ -54,7 +54,7 @@ def article_create(request):
                 return HttpResponse(utils.get_failure(), content_type="application/json")
 
 
-@login_required
+# 不能加 login_required 否则报错
 def save_post_tag(tags, post):
     # tag 整理
     if tags.strip():
@@ -65,7 +65,6 @@ def save_post_tag(tags, post):
             post.save()
 
 
-@login_required
 def save_post_categories(categories, post):
     if categories.strip():
         cate_list = categories.split(",")
@@ -76,13 +75,14 @@ def save_post_categories(categories, post):
 
 
 @login_required
-def admin_delete(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    if post is None:
-        return HttpResponse(utils.get_failure_with_msg("文章不存在"), content_type="application/json")
-    else:
-        post.delete()
-        return HttpResponse(utils.get_success(), content_type="application/json")
+def admin_delete(request):
+    if request.method == 'POST':
+        post = get_object_or_404(Post, pk=request.POST['pk'])
+        if post is None:
+            return HttpResponse(utils.get_failure_with_msg("文章不存在"), content_type="application/json")
+        else:
+            post.delete()
+            return HttpResponse(utils.get_success(), content_type="application/json")
 
 
 class LoginRequiredMixin(object):

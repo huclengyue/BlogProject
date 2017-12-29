@@ -68,8 +68,8 @@
             title: '确定删除该文章吗?',
             then: function () {
                 tale.post({
-                    url: '/xadmin/article/delete',
-                    data: {cid: cid},
+                    url: '/xadmin/article/delete/',
+                    data: {pk: cid, csrfmiddlewaretoken: '{{ csrf_token }}'},
                     success: function (result) {
                         if (result && result.success) {
                             tale.alertOkAndReload('文章删除成功');

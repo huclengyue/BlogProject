@@ -14,7 +14,7 @@ urlpatterns = [
     # 文章
     url(r'^article/$', article.AdminPost.as_view(), name="article_list"),
     url(r'^article/(?P<pk>[0-9]+)/$', article.PostDetailView.as_view(), name="article_edit"),
-    url(r'^article/delete/(?P<pk>[0-9]+)/$', article.admin_delete, name="article_delete"),
+    url(r'^article/delete/$', article.admin_delete, name="article_delete"),
     # 发布文章
     url(r'^article/publish/$', article.article_publish, name="article_publish"),
     # 发布文章按钮
