@@ -4,6 +4,7 @@ from qiniu import Auth, BucketManager
 
 from BlogProject.settings import QINIU_ACCESS_KEY, QINIU_SECRET_KEY, QINIU_BUCKET_NAME
 from blogAdmin.models import Attach
+from blogAdmin import utils
 
 qi_niu = Auth(QINIU_ACCESS_KEY, QINIU_SECRET_KEY)
 file_list = []
@@ -32,7 +33,13 @@ def save_to_db():
     # 标记
     ret = bucket.list(QINIU_BUCKET_NAME, prefix=None, marker=None, limit=None, delimiter=None)
     for filekey in ret[0]['items']:
-        attach = Attach.objects.create(key=filekey['key'], created_time=filekey['putTime'],
-                                       size=filekey['fsize'],
-                                       file_type=filekey['mimeType'])
+        Attach.objects.create(key=filekey['key'],
+                              created_time=utils.intercept_time(filekey['putTime']),
+                              size=filekey['fsize'],
+                              file_type=filekey['mimeType'])
         # attach.save()
+
+
+def delete_file(key):
+    ret, info = BucketManager(qi_niu).delete(QINIU_BUCKET_NAME, key)
+    return ret

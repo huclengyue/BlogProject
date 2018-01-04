@@ -42,6 +42,7 @@ urlpatterns = [
     url(r'^attach/$', attach.attach_list, name="admin_attach_list"),
     url(r'^attach/refresh/$', attach.admin_attach_refresh, name="admin_attach_refresh"),
     url(r'^attach/upload/$', attach.admin_attach_upload, name="admin_attach_upload"),
+    url(r'^attach/delete/$', attach.admin_attach_delete, name="admin_attach_delete"),
 
     # url(r'^search/$', views.search, name="search"),
 

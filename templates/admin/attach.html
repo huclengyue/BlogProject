@@ -1,12 +1,27 @@
 {% include "admin/header.html" with title="文件管理" %} {% load staticfiles %} {% load admin_tags %}
 
 
-
-
-<link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.css" media="screen" />
-<link type="text/css" rel="stylesheet" href="{% static 'admin/plugins/plupload/js/jquery.ui.plupload/css/jquery.ui.plupload.css' %}" media="screen" />
+<link type="text/css" rel="stylesheet"
+      href="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.css" media="screen"/>
+<link type="text/css" rel="stylesheet"
+      href="{% static 'admin/plugins/plupload/js/jquery.ui.plupload/css/jquery.ui.plupload.css' %}"
+      media="screen"/>
 
 <style>
+    .plupload_droptext {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: transparent;
+        text-align: center;
+        vertical-align: middle;
+        border: 0;
+        line-height: 160px;
+        display: none;
+        font-size: 30px;
+    }
 
     .attach-img {
         width: 100px;
@@ -42,7 +57,7 @@
     <div class="row">
         <div class="col-md-12 portlets">
             <div class="m-b-30">
-                <div id="uploader">
+                <div id="uploader" class="ui-button-text">
                     <p>Your browser doesn't have Flash, Silverlight or HTML5 support.</p>
                 </div>
             </div>
@@ -70,7 +85,7 @@
                     </button>
                     <button type="button"
                             class="btn btn-danger btn-sm waves-effect waves-light m-t-5"
-                            onclick="delAttach({{ attach.key }});">
+                            onclick="delAttach({{ attach.pk }});">
                         <i class="fa fa-trash-o"></i> <span>删除</span>
                     </button>
                 </div>
@@ -117,10 +132,9 @@
 {% include 'admin/footer.html' %}
 
 
-
+<script src="//cdn.bootcss.com/clipboard.js/1.6.0/clipboard.min.js"></script>
 <script src="{% static 'admin/plugins/plupload/js/plupload.full.min.js' %}"></script>
 <script src="{% static 'admin/plugins/plupload/js/i18n/zh_CN.js' %}"></script>
-
 <script type="text/javascript"
         src="{% static 'admin/plugins/plupload/js/jquery-ui.min.js' %}"
         charset="UTF-8"></script>
@@ -181,12 +195,12 @@
                 'UploadComplete': function () {
                     // 修改表格状态
                     // 清空文件队列
-//                  if (upload_save_status) {
-//                      tale.alertOkAndReload('附件上传成功');
-//                  } else {
-//                      tale.alertOk('附件上传成功');
-//                      refresh()
-//                  }
+                    if (upload_save_status) {
+                        tale.alertOkAndReload('附件上传成功');
+                    } else {
+                        tale.alertOk('附件上传成功');
+                        refresh()
+                    }
                 }
             }
         });
@@ -210,21 +224,34 @@
             }
         });
     }
+    var clipboard = new Clipboard('button.copy', {
+        text: function (trigger) {
+            return $(trigger).attr('url');
+        }
+    });
 
-    function delAttach(id) {
+    clipboard.on('success', function (e) {
+        console.info('Action:', e.action);
+        console.info('Text:', e.text);
+        console.info('Trigger:', e.trigger);
+        e.clearSelection();
+    });
+
+    function delAttach(pk) {
         tale.alertConfirm({
             title: '确定删除该附件吗?',
             then: function () {
                 tale.post({
                     url: '/xadmin/attach/delete/',
                     data: {
-                        id: id
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        pk: pk
                     },
                     success: function (result) {
                         if (result && result.success) {
-                            tale.alertOkAndReload('上传成功');
+                            tale.alertOkAndReload('文件删除成功');
                         } else {
-                            tale.alertError(result.msg || '上传失败');
+                            tale.alertError(result.msg || '文件删除失败');
                         }
                     }
                 });

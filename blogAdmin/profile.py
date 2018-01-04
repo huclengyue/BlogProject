@@ -17,6 +17,7 @@ def admin_profile(request):
             user = request.user
             user.nickname = request.POST['nickname']
             user.email = request.POST['email']
+            user.avatar = request.POST['avatar']
             user.save()
             return HttpResponse(utils.get_success(), content_type="application/json")
         except:

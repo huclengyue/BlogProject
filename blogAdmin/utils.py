@@ -20,3 +20,7 @@ def isEmpty(string):
         return True
     else:
         return False
+
+
+def intercept_time(time):
+    return int(str(time)[:10])

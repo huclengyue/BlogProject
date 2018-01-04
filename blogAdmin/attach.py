@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import json
 
+import time
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
@@ -62,7 +63,28 @@ def admin_attach_upload(request):
     if request.method == 'POST':
         try:
             info = json.loads(request.POST['info[response]'])
+            Attach.objects.create(key=info['key'], created_time=int(time.time()))
             print(info['key'])
             return HttpResponse(utils.get_success(), content_type="application/json")
+        except:
+            return HttpResponse(utils.get_failure(), content_type="application/json")
+
+
+def admin_attach_delete(request):
+    if request.method == 'POST':
+        try:
+            pk = json.loads(request.POST['pk'])
+            attach = Attach.objects.get(pk=pk)
+            if attach is None:
+                return HttpResponse(utils.get_failure_with_msg('文件不存在'),
+                                    content_type="application/json")
+            else:
+                rec = file_manager.delete_file(attach.key)
+                # rec 为none 时 删除失败 length == 0 时 删除成功
+                if len(rec) == 0:
+                    attach.delete()
+                    return HttpResponse(utils.get_success(), content_type="application/json")
+                else:
+                    return HttpResponse(utils.get_failure(), content_type="application/json")
         except:
             return HttpResponse(utils.get_failure(), content_type="application/json")
