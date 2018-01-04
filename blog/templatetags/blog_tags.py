@@ -4,6 +4,7 @@ from django import template
 from django.db.models.aggregates import Count
 
 from blog.models import Post, Category, Tag, BlogSet, Friendly, Catalog
+from blogAdmin.models import Attach
 from comments.models import Comment
 
 register = template.Library()
@@ -32,14 +33,10 @@ def get_categories():
     return Category.objects.annotate(num_posts=Count('post')).filter(num_posts__gt=0)  # 分类模板
 
 
-
-
 @register.simple_tag()
 def get_tags():
     # 查找所有TAG  并且 将tag的文章数保存到num_posts中 并且过滤num_posts==0的tag
     return Tag.objects.annotate(num_posts=Count('post')).filter(num_posts__gt=0)
-
-
 
 
 @register.simple_tag()
@@ -60,6 +57,11 @@ def get_catalog():
 @register.simple_tag()
 def get_post_count():
     return Post.objects.count()
+
+
+@register.simple_tag()
+def get_attach_count():
+    return Attach.objects.count()
 
 
 @register.simple_tag()

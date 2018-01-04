@@ -1,28 +1,12 @@
-{% include "admin/header.html" with title="文件管理" %}
-{% load staticfiles %}
-{% load admin_tags %}
-<link href="//cdn.bootcss.com/dropzone/4.3.0/min/dropzone.min.css" rel="stylesheet">
+{% include "admin/header.html" with title="文件管理" %} {% load staticfiles %} {% load admin_tags %}
+
+
+
+
+<link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.css" media="screen" />
+<link type="text/css" rel="stylesheet" href="{% static 'admin/plugins/plupload/js/jquery.ui.plupload/css/jquery.ui.plupload.css' %}" media="screen" />
+
 <style>
-    #dropzone {
-        margin-bottom: 3rem;
-    }
-
-    .dropzone {
-        border: 2px dashed #0087F7;
-        border-radius: 5px;
-        background: white;
-    }
-
-    .dropzone .dz-message {
-        font-weight: 400;
-    }
-
-    .dropzone .dz-message .note {
-        font-size: 0.8em;
-        font-weight: 200;
-        display: block;
-        margin-top: 1.4rem;
-    }
 
     .attach-img {
         width: 100px;
@@ -43,55 +27,55 @@
 <div class="row">
     <div class="col-sm-12">
         <h4 class="page-title">文件管理</h4>
+        <div class="form-group col-md-6" style="padding: 0 10px 0 0;">
+            <input class="form-control" placeholder="请输入文件名" name="title" required/>
+        </div>
+        <button type="button" class="btn btn-primary waves-effect waves-light"
+                onclick="subArticle('search');">
+            搜索文件
+        </button>
+        <button type="button" class="btn btn-warning waves-effect waves-light" onclick="refresh();">
+            刷新文件列表
+        </button>
     </div>
+
     <div class="row">
         <div class="col-md-12 portlets">
-            <!-- Your awesome content goes here -->
             <div class="m-b-30">
-                <form action="#" class="dropzone" id="dropzone" enctype="multipart/form-data">
-                    <div class="fallback">
-                        <input name="file" type="file" multiple="multiple">
-                    </div>
-                    <div class="dz-message">
-                        <p>将文件拖至此处或点击上传.{{ attach_url }}</p>
-                        <p>
-                            <span style="font-size: 16px; color: #d0d0d0;">一次最多可以上传10个文件</span>
-                        </p>
-                    </div>
-                </form>
+                <div id="uploader">
+                    <p>Your browser doesn't have Flash, Silverlight or HTML5 support.</p>
+                </div>
             </div>
         </div>
     </div>
+
+
     <div class="col-md-12 attach">
-        {% if ret.items %}
-            {% for attach in ret.items %}
-                <div class="col-md-2 text-center m-t-10">
-                    <a href="{{ attach_url }}{{ attach.key }}" target="_blank">
-                        <img class="attach-img"
-                                {% if 'image' in attach.mimeType %}
-                             src="{{ attach_url }}{{ attach.key }}"
-                                {% else %}
-                             src="{% static 'admin/images/attach.png' %}"
-                                {% endif %}
-                             title="{{ attach.key }}"/>
-                    </a>
-                    <div class="clearfix m-t-10">
-                <span class="attach-text" data-toggle="tooltip" data-placement="top"
-                      data-original-title="{{ attach.key }}">{% get_file_name attach.key %}</span>
-                    </div>
-                    <div class="clearfix">
-                        <button url="{{ attach_url }}{{ attach.key }}" type="button"
-                                class="btn btn-warning btn-sm waves-effect waves-light m-t-5 copy">
-                            <i class="fa fa-copy"></i> <span>复制</span>
-                        </button>
-                        <button type="button" class="btn btn-danger btn-sm waves-effect waves-light m-t-5"
-                                onclick="delAttach({{ attach.key }});">
-                            <i class="fa fa-trash-o"></i> <span>删除</span>
-                        </button>
-                    </div>
+        {% if file_list %} {% for attach in file_list %}
+            <div class="col-md-2 text-center m-t-10">
+                <a href="{{ attach_url }}{{ attach.key }}" target="_blank">
+                    <img class="attach-img" {% if 'image' in attach.file_type %}
+                         src="{{ attach_url }}{{ attach.key }}" {% else %}
+                         src="{% static 'admin/images/attach.png' %}" {% endif %}
+                         title="{{ attach.key }}"/>
+                </a>
+                <div class="clearfix m-t-10">
+                    <span class="attach-text" data-toggle="tooltip" data-placement="top"
+                          data-original-title="{{ attach.key }}">{% get_file_name attach.key %}</span>
                 </div>
-            {% endfor %}
-        {% else %}
+                <div class="clearfix">
+                    <button url="{{ attach_url }}{{ attach.key }}" type="button"
+                            class="btn btn-warning btn-sm waves-effect waves-light m-t-5 copy">
+                        <i class="fa fa-copy"></i> <span>复制</span>
+                    </button>
+                    <button type="button"
+                            class="btn btn-danger btn-sm waves-effect waves-light m-t-5"
+                            onclick="delAttach({{ attach.key }});">
+                        <i class="fa fa-trash-o"></i> <span>删除</span>
+                    </button>
+                </div>
+            </div>
+        {% endfor %} {% else %}
             <div class="row">
                 <div class="col-md-4 text-center">
                     <div class="alert alert-warning">
@@ -99,80 +83,172 @@
                     </div>
                 </div>
             </div>
+        {% endif %} {# 分页信息#}
+
+        <ul class="pagination m-b-5 pull-right">
+            {% if file_list.has_previous %}
+                <li>
+                    <a href="?page={{ file_list.previous_page_number }}" aria-label="Previous">
+                        <i class="fa fa-angle-left"></i>&nbsp;上一页
+                    </a>
+                </li>
+            {% endif %} {% for nav in file_list.paginator.page_range %}
+            {% ifequal nav file_list.number %}
+                <li class="active">
+                    {% else %}
+                <li>{% endifequal %}
+        <a href="?page={{ nav }}">{{ nav }}</a>
+        </li>
+            </li>
+
+        {% endfor %} {% if file_list.has_next %}
+            <li>
+                <a href="?page={{ file_list.next_page_number }}" aria-label="Next">
+                    下一页&nbsp;<i class="fa fa-angle-right"></i>
+                </a>
+            </li>
         {% endif %}
-        #end
-        #call pageAdminNav(attachs)
-        #end
+            <li><span>共{{ file_list.paginator.num_pages }}页</span></li>
+        </ul>
+
     </div>
 </div>
 
 {% include 'admin/footer.html' %}
 
-<script src="//cdn.bootcss.com/dropzone/4.3.0/min/dropzone.min.js"></script>
-<script src="//cdn.bootcss.com/clipboard.js/1.6.0/clipboard.min.js"></script>
-<script src="//cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.min.js"></script>
+
+
+<script src="{% static 'admin/plugins/plupload/js/plupload.full.min.js' %}"></script>
+<script src="{% static 'admin/plugins/plupload/js/i18n/zh_CN.js' %}"></script>
+
+<script type="text/javascript"
+        src="{% static 'admin/plugins/plupload/js/jquery-ui.min.js' %}"
+        charset="UTF-8"></script>
+<script type="text/javascript"
+        src="{% static 'admin/plugins/plupload/js/jquery.ui.plupload/jquery.ui.plupload.min.js' %}"
+        charset="UTF-8"></script>
+<script src="{% static 'admin/js/qiniu.min.js' %}"></script>
 
 <script type="text/javascript">
     var tale = new $.tale();
-    $("#dropzone").dropzone({
-        url: "/xadmin/attach/upload",
-        filesizeBase: 1024,//定义字节算法 默认1000
-        maxFiles: $.constant().MAX_FILES,//最大文件数量
-        maxFilesize: '{{ max_file_size }}', //MB
-        fallback: function () {
-            tale.alertError('暂不支持您的浏览器上传!');
-        },
-        uploadMultiple: true,
-        dictFileTooBig: '您的文件超过' + {{ max_file_size }} +'MB!',
-        dictInvalidInputType: '不支持您上传的类型',
-        dictMaxFilesExceeded: '您的文件超过' + $.constant().MAX_FILES + '个!',
-        init: function () {
-            this.on('queuecomplete', function (files) {
-                tale.alertOkAndReload('上传成功');
-            });
-            this.on('error', function (a, errorMessage, result) {
-                if (!result.success && result.msg) {
-                    tale.alertError(result.msg || '上传失败');
+    $(function () {
+        $("#uploader").plupload({
+            // General settings
+            runtimes: 'html5,flash,silverlight,html4',
+            url: 'http://upload.qiniu.com/', // 服务器上传地址
+            // Maximum file size
+            max_file_size: '5mb',
+            chunk_size: '1mb',
+            // Specify what files to browse for
+            filters: [
+                {title: "Image files", extensions: "jpg,gif,png"},
+            ],
+            resize: {width: 800, height: 800, crop: true, quality: 60, preserve_headers: false},
+            // Rename files by clicking on their titles
+            rename: true,
+            // Sort files
+            sortable: true,
+            // Enable ability to drag'n'drop files onto the widget (currently only HTML5 supports that)
+            dragdrop: true,
+            // Views to activate
+            views: {
+                list: false,
+                thumbs: true, // Show thumbs
+                active: 'thumbs'
+            },
+            flash_swf_url: '{% static 'admin/plugins/plupload/js/Moxie.swf' %}',  //flash地址
+            silverlight_xap_url: '{% static 'admin/plugins/plupload/js/Moxie.xap' %}',
+            init: {
+                'FilesAdded': function (up, files) {
+                },
+                'BeforeUpload': function (up, file) {
+                    // 设置当前上传文件名和token
+                    up.setOption('multipart_params', {
+                        'token': '{{ token }}',
+                        'key': "blog_image/" + file.name,
+                        'callbackBody': "name=$(fname)&hash=$(etag)&location=$(x:location)&price=$(x:price)&uid=123",
+                    });
+                },
+                'UploadProgress': function (up, file) {
+                    // 每个文件上传时,处理相关的事情
+                },
+                'FileUploaded': function (up, file, info) {
+                    file_upload(info)
+                },
+                'Error': function (up, err, errTip) {
+                    //上传出错时,处理相关的事情
+                },
+                'UploadComplete': function () {
+                    // 修改表格状态
+                    // 清空文件队列
+//                  if (upload_save_status) {
+//                      tale.alertOkAndReload('附件上传成功');
+//                  } else {
+//                      tale.alertOk('附件上传成功');
+//                      refresh()
+//                  }
                 }
-            });
-            this.on('maxfilesreached', function () {
-                this.removeAllFiles(true);
-                tale.alertWarn('文件数量超出限制');
-            });
-        }
+            }
+        });
     });
 
-    var clipboard = new Clipboard('button.copy', {
-        text: function (trigger) {
-            return $(trigger).attr('url');
-        }
-    });
+    var upload_save_status = true
 
-    clipboard.on('success', function (e) {
-        console.info('Action:', e.action);
-        console.info('Text:', e.text);
-        console.info('Trigger:', e.trigger);
-        e.clearSelection();
-    });
+    function file_status(status) {
+        upload_save_status = !!(status && upload_save_status);
+    }
+
+    function file_upload(info) {
+        tale.post({
+            url: '/xadmin/attach/upload/',
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                info: info
+            },
+            success: function (result) {
+                file_status(result && result.success)
+            }
+        });
+    }
 
     function delAttach(id) {
         tale.alertConfirm({
             title: '确定删除该附件吗?',
             then: function () {
                 tale.post({
-                    url: '/xadmin/attach/delete',
-                    data: {id: id},
+                    url: '/xadmin/attach/delete/',
+                    data: {
+                        id: id
+                    },
                     success: function (result) {
                         if (result && result.success) {
-                            tale.alertOkAndReload('附件删除成功');
+                            tale.alertOkAndReload('上传成功');
                         } else {
-                            tale.alertError(result.msg || '附件删除失败');
+                            tale.alertError(result.msg || '上传失败');
                         }
                     }
                 });
             }
         });
     }
+
+    function refresh() {
+        tale.post({
+            url: '/xadmin/attach/refresh/',
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (result) {
+                if (result && result.success) {
+                    tale.alertOkAndReload('文件列表刷新成功');
+                } else {
+                    tale.alertError(result.msg || '文件列表刷新失败');
+                }
+            }
+        });
+    }
 </script>
+
 </body>
+
 </html>

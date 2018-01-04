@@ -86,10 +86,8 @@
             data: param,
             success: function (result) {
                 if (result && result.success) {
-                    tale.alertOk('设置保存成功');
-                    setTimeout(function () {
-                        window.location.reload();
-                    }, 500);
+                    tale.alertOkAndReload('设置保存成功');
+
                 } else {
                     tale.alertError(result.msg || '设置保存失败');
                 }

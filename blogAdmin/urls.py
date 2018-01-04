@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import url
 
-from blogAdmin import views, article, profile, other
+from blogAdmin import views, article, profile, other, attach
 
 app_name = 'blogAdmin'
 urlpatterns = [
@@ -39,7 +39,9 @@ urlpatterns = [
     url(r'^category/save/$', other.admin_category_save, name="admin_category_save"),
 
     # 附件管理
-    url(r'^attach/$', views.attach, name="admin_attach"),
+    url(r'^attach/$', attach.attach_list, name="admin_attach_list"),
+    url(r'^attach/refresh/$', attach.admin_attach_refresh, name="admin_attach_refresh"),
+    url(r'^attach/upload/$', attach.admin_attach_upload, name="admin_attach_upload"),
 
     # url(r'^search/$', views.search, name="search"),
 

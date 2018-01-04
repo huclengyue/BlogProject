@@ -2,12 +2,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 
-from BlogProject.settings import QINIU_SECURE_URL, QINIU_BUCKET_DOMAIN
 from blog.models import Friendly, Category, BlogSet
 from blogAdmin import utils, file_manager
-
-
 # Create your views here.
+from blogAdmin.models import Attach
 
 
 @login_required
@@ -17,9 +15,10 @@ def admin_index(request):
     if utils.isEmpty(user.nickname):
         user.nickname = user.username
         user.save()
-    if Category.objects.all() is None:
-        Category.objects.get_or_create('默认分类')
-
+    if Category.objects.all().count() == 0:
+        Category.objects.get_or_create(name='默认分类')
+    if Attach.objects.all().count() == 0:
+        file_manager.save_to_db()
     return render(request, 'admin/index.html')
 
 
@@ -99,20 +98,3 @@ def admin_setting(request):
                 return HttpResponse(utils.get_success(), content_type="application/json")
         except:
             return HttpResponse(utils.get_failure(), content_type="application/json")
-
-
-@login_required
-def attach(request):
-    if request.method == 'GET':
-        qiniu = QINIU_BUCKET_DOMAIN
-        if QINIU_SECURE_URL:
-            qiniu = 'https://' + qiniu
-        else:
-            qiniu = 'http://' + qiniu
-
-        content = {'attach_url': qiniu,
-                   'max_file_size': 20,
-                   'token': file_manager.get_qiniu_token(),
-                   'ret': file_manager.get_file(30)}
-
-        return render(request, 'admin/attach.html', context=content)

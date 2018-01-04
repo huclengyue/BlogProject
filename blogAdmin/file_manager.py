@@ -1,33 +1,38 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import uuid
-
 from qiniu import Auth, BucketManager
 
 from BlogProject.settings import QINIU_ACCESS_KEY, QINIU_SECRET_KEY, QINIU_BUCKET_NAME
+from blogAdmin.models import Attach
 
-q = Auth(QINIU_ACCESS_KEY, QINIU_SECRET_KEY)
+qi_niu = Auth(QINIU_ACCESS_KEY, QINIU_SECRET_KEY)
+file_list = []
 
 
 def get_qiniu_token():
     # 要上传的空间
-    key = str(uuid.uuid1()).replace('-', '')
-    token = q.upload_token(QINIU_BUCKET_NAME, key, 3600)
+    # key = str(uuid.uuid1()).replace('-', '')
+    token = qi_niu.upload_token(QINIU_BUCKET_NAME, None, 3600)
     return token
 
 
 # 列举条目
-def get_file(limit):
-    bucket = BucketManager(q)
-    # 要上传的空间
-    key = str(uuid.uuid1()).replace('-', '')
-    # 前缀
-    prefix = None
-    # 列举出除'/'的所有文件以及以'/'为分隔的所有前缀
-    delimiter = None
+# 前缀
+# 列举出除'/'的所有文件以及以'/'为分隔的所有前缀
+def get_file(mast=False):
+    if mast:
+        Attach.objects.all().delete()
+        save_to_db()
+    else:
+        return Attach.objects.all()
+
+
+def save_to_db():
+    bucket = BucketManager(qi_niu)
     # 标记
-    marker = None
-    ret = bucket.list(QINIU_BUCKET_NAME, prefix, marker, limit, delimiter)
-    return ret[0]
-    # for r in ret[0].get('items'):
-    #     print(r.get('key'))
+    ret = bucket.list(QINIU_BUCKET_NAME, prefix=None, marker=None, limit=None, delimiter=None)
+    for filekey in ret[0]['items']:
+        attach = Attach.objects.create(key=filekey['key'], created_time=filekey['putTime'],
+                                       size=filekey['fsize'],
+                                       file_type=filekey['mimeType'])
+        # attach.save()

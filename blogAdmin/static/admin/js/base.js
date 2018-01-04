@@ -122,6 +122,26 @@ $.tale.prototype.post = function (options) {
             console.log('post异常', e);
         }
     });
+};/**
+ * 全局post函数
+ *
+ * @param options   参数
+ */
+$.tale.prototype.get = function (options) {
+    var self = this;
+    $.ajax({
+        type: 'GET',
+        url: options.url,
+        async: options.async || false,
+        dataType: 'json',
+        success: function (result) {
+            self.hideLoading();
+            options.success && options.success(result);
+        },
+        error: function (e) {
+            console.log('post异常', e);
+        }
+    });
 };
 
 /**
