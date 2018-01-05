@@ -232,8 +232,9 @@ class ArchiveView(ListView):
     context_object_name = 'post_list'
 
     def get_queryset(self):
-        return super(ArchiveView, self).get_queryset().filter(created_time__year=self.kwargs.get('year'),
-                                                              created_time__month=self.kwargs.get('month'))
+        return super(ArchiveView, self).get_queryset().filter(
+            created_time__year=self.kwargs.get('year'),
+            created_time__month=self.kwargs.get('month'))
 
 
 class ArchiveViewList(ListView):
@@ -314,3 +315,15 @@ def search(request):
         return render(request, 'blog/index.html', {'error_msg': error_msg})
     post_list = Post.objects.filter(Q(title__icontains=q) | Q(body__icontains=q))
     return render(request, 'blog/index.html', {'error_msg': error_msg, 'post_list': post_list})
+
+
+def page_not_found(request):
+    return render(request, 'comm/error_404.html')
+
+
+def page_error(request):
+    return render(request, 'comm/error_500.html')
+
+
+def permission_denied(request):
+    return render(request, '403.html')

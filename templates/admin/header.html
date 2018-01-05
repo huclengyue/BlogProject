@@ -9,7 +9,7 @@
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <meta content="Coderthemes" name="author"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <link rel="shortcut icon" href="{% static 'admin/images/favicon.png' %}"/>
+    <link rel="shortcut icon" href="{% static 'admin/images/favicon.ico' %}"/>
 
     <link href="{% static 'admin/plugins/bootstrap/3.3.7/css/bootstrap.min.css' %}" rel="stylesheet"
           type="text/css"/>
@@ -52,11 +52,13 @@
                                aria-expanded="true">
                                 {% if request.user.avatar %}
                                     <img src="{{ request.user.avatar }}" alt="user-img"
-                                         class="img-circle"> </a>
+                                         class="img-circle">
                                 {% else %}
-                                    <img src="{% gravatar_url request.user.email 60 %}" alt="user-img"
-                                         class="img-circle"> </a>
+                                    <img src="{% gravatar_url request.user.email 60 %}"
+                                         alt="user-img"
+                                         class="img-circle">
                                 {% endif %}
+                            </a>
                             <ul class="dropdown-menu">
                                 <li><a href="{% url 'blog:index' %}" target="_blank"><i
                                         class="fa fa-eye"

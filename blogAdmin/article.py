@@ -35,15 +35,15 @@ def article_create(request):
         tags = request.POST['tags']
         categories = request.POST['categories']
         if not pk.strip():
-            try:
+            # try:
                 post = Post.objects.create(title=title, body=content)
                 # tag 整理
                 save_post_tag(tags, post)
                 # 分类
                 save_post_categories(categories, post)
                 return HttpResponse(utils.get_success(), content_type="application/json")
-            except:
-                return HttpResponse(utils.get_failure(), content_type="application/json")
+            # except:
+            #     return HttpResponse(utils.get_failure(), content_type="application/json")
         else:
             try:
                 post = get_object_or_404(Post, pk=pk)

@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import hashlib
+from urllib import parse
+
 from django import template
 from django.db.models.aggregates import Count
 
@@ -67,3 +70,11 @@ def get_attach_count():
 @register.simple_tag()
 def get_tags_count():
     return Tag.objects.count()
+
+
+@register.simple_tag()
+def gravatar_url(email, size=40):
+    default = "https://example.com/static/images/defaultavatar.jpg"
+    return "https://www.gravatar.com/avatar/%s?%s" % (
+        hashlib.md5(email.lower().encode("utf8")).hexdigest(),
+        parse.urlencode({'d': default, 's': str(size)}))

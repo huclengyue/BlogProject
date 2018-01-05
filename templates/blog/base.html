@@ -24,14 +24,12 @@
     <!-- Style Sheet-->
 
     <link rel="stylesheet" href="{% static 'blog/vendors/fancybox/jquery.fancybox.css' %}">
-    <link rel="stylesheet" href="{% static 'blog/vendors/font-awesome/css/font-awesome.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'blog/vendors/font-awesome/css/font-awesome.min.css' %}"
+          type="text/css">
     <link rel="stylesheet" href="{% static 'blog/css/main.css' %}" type="text/css">
 
     <script type="text/javascript" src="{% static "blog/js/jquery.min.js" %}"></script>
     <!-- End Style-->
-    <style type="text/css">.fancybox-margin {
-        margin-right: 15px;
-    }</style>
 
     <link rel="canonical" href="{% url 'blog:index' %}"/>
     <meta name="referrer" content="origin"/>
@@ -48,38 +46,15 @@
     <meta name="twitter:description" content="{{ blog.description }}"/>
     <meta name="twitter:url" content="{% url 'blog:index' %}"/>
 
-    <script type="application/ld+json">
-{
-    "@context": "http://schema.org",
-    "@type": "Website",
-    "publisher": "LengYue's Blog",
-    "url": "{% url 'blog:index' %}",
-    "description": "{{ blog.description }}"
-}
-
-
-
-
-
-
-
-
-
-
-
-    </script>
-    <link rel="alternate" type="application/rss+xml" title="{{ blog.site_name }}" href="{% url 'blog:index' %}rss/"/>
-    <script type="text/javascript" id="hexo.configuration">
+    <link rel="alternate" type="application/rss+xml" title="{{ blog.site_name }}"
+          href="{% url 'blog:index' %}rss/"/>
+    <script type="text/javascript">
         var NexT = window.NexT || {};
         var CONFIG = {
             scheme: 'Mist',
             sidebar: {"position": "right", "display": "post"},
             fancybox: true,
             motion: true //,
-            // duoshuo: {
-            //    userId: 4141040,
-            //    author: ''
-            //}
         };
     </script>
 
@@ -170,16 +145,23 @@
             {% endblock main %}
             {% block  toggle %}
             {% endblock toggle %}
-            <aside id="sidebar" class="sidebar {% block sidebar %}{% endblock %}" style="display: block; width: 240px;">
+            <aside id="sidebar" class="sidebar {% block sidebar %}{% endblock %}"
+                   style="display: block; width: 240px;">
                 <div class="sidebar-inner">
                     {% block post_select %}
                     {% endblock post_select %}
-                    <section class="site-overview sidebar-panel sidebar-panel-active" >
+                    <section class="site-overview sidebar-panel sidebar-panel-active">
                         <div class="site-author motion-element" itemprop="author" itemscope=""
                              itemtype="http://schema.org/Person">
-                            <img class="site-author-image" itemprop="image"
-                                 src="https://dn-lengyue.qbox.me/image/f/43/8db24d7c39a7a04a1020fc7dd799d.png"
-                                 alt="{{ blog.site_name }}">
+                            {% if request.user.avatar %}
+                                <img class="site-author-image" itemprop="image"
+                                     src="{{ request.user.avatar }}"
+                                     alt="{{ blog.site_name }}">
+                            {% else %}
+                                <img class="site-author-image" itemprop="image"
+                                     src="{% gravatar_url request.user.email 60 %}"
+                                     alt="{{ blog.site_name }}">
+                            {% endif %}
                             <p class="site-author-name" itemprop="name">LengYue</p>
                             <p class="site-description motion-element" itemprop="description">
                                 {{ blog.description }}</p>
@@ -204,14 +186,16 @@
 
                         </nav>
                         <div class="feed-link motion-element">
-                            <a href="{% url 'rss' %}" rel="alternate"><i class="fa fa-rss"></i>RSS</a>
+                            <a href="{% url 'rss' %}" rel="alternate"><i
+                                    class="fa fa-rss"></i>RSS</a>
                         </div>
                         <div class="links-of-author motion-element">
                             <!--添加友情链接位置，每复制一个span并修改链接及内容即可-->
                             {% get_friendly_link as friendly_link %}
                             {% for link in friendly_link %}
                                 <span class="links-of-author-item">
-                                <a href="{{ link.link }}" target="_blank">{{ link.site_name }}</a></span>
+                                <a href="{{ link.link }}"
+                                   target="_blank">{{ link.site_name }}</a></span>
                             {% endfor %}
                             <!--友链结束位置-->
 
@@ -253,11 +237,16 @@
     });
 </script>
 <script type="text/javascript" src="{% static 'blog/vendors/velocity/velocity.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'blog/vendors/velocity/velocity.ui.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'blog/vendors/fastclick/lib/fastclick.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'blog/vendors/jquery_lazyload/jquery.lazyload.js' %}"></script>
-<script type="text/javascript" src="{% static 'blog/vendors/fancybox/jquery.fancybox.pack.js' %}"></script>
-<script type="text/javascript" src="{% static 'blog/vendors/ua-parser-js/ua-parser.pack.js' %}"></script>
+<script type="text/javascript"
+        src="{% static 'blog/vendors/velocity/velocity.ui.min.js' %}"></script>
+<script type="text/javascript"
+        src="{% static 'blog/vendors/fastclick/lib/fastclick.min.js' %}"></script>
+<script type="text/javascript"
+        src="{% static 'blog/vendors/jquery_lazyload/jquery.lazyload.js' %}"></script>
+<script type="text/javascript"
+        src="{% static 'blog/vendors/fancybox/jquery.fancybox.pack.js' %}"></script>
+<script type="text/javascript"
+        src="{% static 'blog/vendors/ua-parser-js/ua-parser.pack.js' %}"></script>
 <script type="text/javascript" src="{% static 'blog/js/motion.js' %}"></script>
 <script type="text/javascript" src="{% static 'blog/js/utils.js' %}"></script>
 <script type="text/javascript" src="{% static 'blog/js/affix.js' %}"></script>

@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from django.conf.urls import url
-
 from blog import views
 
 app_name = 'blog'
@@ -17,5 +16,4 @@ urlpatterns = [
     url(r'^tag/(?P<name>[\d\w]+)/$', views.TagViewByName.as_view(), name="tag"),
     url(r'^tags/$', views.get_tags_list, name="tag_list"),
     # url(r'^search/$', views.search, name="search"),
-
 ]

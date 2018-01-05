@@ -30,3 +30,5 @@ urlpatterns = [
     # 登录模块
     url(r'^users/', include('django.contrib.auth.urls')),
 ]
+handler404 = 'blog.views.page_not_found'
+handler500 = 'blog.views.page_not_found'

@@ -1,31 +1,45 @@
-<!DOCTYPE html>
-<html>
+{% load staticfiles %}
+<!doctype html>
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="zh-CN"><![endif]-->
+<!--[if (gte IE 9)| IEMobile |!(IE)]><!-->
+<html class="no-js" lang="zh-CN"><!--<![endif]-->
 <head>
-    <meta charset="utf-8"/>
-    <title>404（找不到页面）- Tale</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <link rel="shortcut icon" href="/static/admin/images/favicon.png"/>
-    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/static/admin/css/style.min.css?v=${version}" rel="stylesheet" type="text/css">
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
+    <title>404 — 页面未找到</title>
+
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport"
+          content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+
+    <link rel="shortcut icon" href="{% static 'admin/images/favicon.ico' %}">
+    <meta http-equiv="cleartype" content="on">
+
+    <link rel="stylesheet" href="/ghost/ghost.min.css?v=a7bac749bb"/>
 </head>
 <body>
-
-<div class="wrapper-page">
-    <div class="ex-page-content text-center">
-        <h1>404!</h1>
-        <h2>很抱歉，没有找到这个页面！</h2>
-        <br>
-        <a class="btn btn-purple waves-effect waves-light" href="/"><i class="fa fa-angle-left"></i> 返回首页</a>
+<main role="main" id="main">
+    <div class="gh-app">
+        <div class="gh-viewport">
+            <div class="gh-view">
+                <section class="error-content error-404 js-error-container">
+                    <section class="error-details">
+                        <img
+                                class="error-ghost"
+                                src="{% static 'blog/images/404.png' %}"/>
+                        <section class="error-message">
+                            <h1 class="error-code">404</h1>
+                            <h2 class="error-description">页面未找到</h2>
+                            <a class="error-link" href="{% url 'blog:index' %}">返回首页 →</a>
+                        </section>
+                    </section>
+                </section>
+            </div>
+        </div>
     </div>
-</div>
-
+</main>
 </body>
 </html>
