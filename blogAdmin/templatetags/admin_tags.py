@@ -50,14 +50,14 @@ def get_user_info():
 
 
 @register.simple_tag()
-def get__all_categories():
+def get_all_categories():
     # 记得在顶部引入 count 函数
-    return Category.objects.annotate(num_posts=Count('post')).order_by('name')
+    return Category.objects.annotate(num_posts=Count('post'))
 
 
 @register.simple_tag()
 def get_all_tags():
-    return Tag.objects.annotate(num_posts=Count('post')).order_by('name')
+    return Tag.objects.annotate(num_posts=Count('post'))
 
 
 @register.simple_tag()

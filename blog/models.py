@@ -14,17 +14,25 @@ from django.utils.html import strip_tags
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
+    created_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ['-created_time', 'name']
 
 
 # 标签
 class Tag(models.Model):
     name = models.CharField(max_length=100)
+    created_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ['-created_time', 'name']
 
 
 class Post(models.Model):

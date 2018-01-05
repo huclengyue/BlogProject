@@ -10,7 +10,7 @@
                 <h1 class="panel-title">分类列表</h1>
             </div>
             <div class="panel-body">
-                {% get__all_categories as cate_list %}
+                {% get_all_categories as cate_list %}
                 {% for cate in cate_list %}
                     <div class="btn-group m-b-10">
                         {% if cate.name == '默认分类' %}
