@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import random
+import hashlib
+from urllib import parse
 
 from django import template
 from django.db.models.aggregates import Count
@@ -60,7 +62,8 @@ def get_all_tags():
 
 @register.simple_tag()
 def get_random_color():
-    color_list = ['purple ', 'inverse', 'danger', 'success', 'info', 'primary', 'warning', 'default', ]
+    color_list = ['purple ', 'inverse', 'danger', 'success', 'info', 'primary', 'warning',
+                  'default', ]
     return color_list[random.randint(0, len(color_list) - 1)]
 
 
@@ -74,3 +77,10 @@ def get_recent_comment():
 @register.simple_tag()
 def get_file_name(file_path):
     return file_path.split("/")[-1][:15]
+
+
+@register.simple_tag()
+def gravatar_url(email, size=40):
+    default = "https://example.com/static/images/defaultavatar.jpg"
+    return "https://www.gravatar.com/avatar/%s?%s" % (
+        hashlib.md5(email.lower().encode("utf8")).hexdigest(), parse.urlencode({'d': default, 's': str(size)}))

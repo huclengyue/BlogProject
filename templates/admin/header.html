@@ -54,7 +54,7 @@
                                     <img src="{{ request.user.avatar }}" alt="user-img"
                                          class="img-circle"> </a>
                                 {% else %}
-                                    <img src="${gravatar(login_user.email)}" alt="user-img"
+                                    <img src="{% gravatar_url request.user.email 60 %}" alt="user-img"
                                          class="img-circle"> </a>
                                 {% endif %}
                             <ul class="dropdown-menu">
@@ -113,7 +113,7 @@
                                 class="fa fa-plus"></i></span></a>
                         <ul class="list-unstyled">
                             <li>
-                                <a href="/admin/page" class="waves-effect "><i
+                                <a href="#" class="waves-effect "><i
                                         class="fa fa-file-text"
                                         aria-hidden="true"></i><span> 页面管理 </span></a>
                             </li>
