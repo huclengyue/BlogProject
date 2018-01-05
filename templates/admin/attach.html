@@ -260,12 +260,14 @@
     }
 
     function refresh() {
+        tale.showLoading();
         tale.post({
             url: '/xadmin/attach/refresh/',
             data: {
                 csrfmiddlewaretoken: '{{ csrf_token }}'
             },
             success: function (result) {
+                tale.hideLoading()
                 if (result && result.success) {
                     tale.alertOkAndReload('文件列表刷新成功');
                 } else {

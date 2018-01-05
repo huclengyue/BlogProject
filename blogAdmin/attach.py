@@ -62,9 +62,13 @@ def admin_attach_refresh(request):
 def admin_attach_upload(request):
     if request.method == 'POST':
         try:
-            info = json.loads(request.POST['info[response]'])
-            Attach.objects.create(key=info['key'], created_time=int(time.time()))
-            print(info['key'])
+            if 'info[response]' in request.POST:
+                info = json.loads(request.POST['info[response]'])
+                key = info['key']
+            else:
+                key = request.POST['info[key]']
+            Attach.objects.create(key=key, created_time=int(time.time()))
+            print(key)
             return HttpResponse(utils.get_success(), content_type="application/json")
         except:
             return HttpResponse(utils.get_failure(), content_type="application/json")
@@ -79,11 +83,14 @@ def admin_attach_delete(request):
                 return HttpResponse(utils.get_failure_with_msg('文件不存在'),
                                     content_type="application/json")
             else:
-                rec = file_manager.delete_file(attach.key)
+                code = file_manager.delete_file(attach.key)
                 # rec 为none 时 删除失败 length == 0 时 删除成功
-                if len(rec) == 0:
+                if code == 200 or code == 612:
                     attach.delete()
                     return HttpResponse(utils.get_success(), content_type="application/json")
+                elif code == 599:
+                    return HttpResponse(utils.get_failure_with_msg('服务端操作失败，请重试'),
+                                        content_type="application/json")
                 else:
                     return HttpResponse(utils.get_failure(), content_type="application/json")
         except:

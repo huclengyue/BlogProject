@@ -11,11 +11,18 @@ from django.views.generic import ListView, DetailView
 from BlogProject import settings
 from blog.models import Post, Category, Tag
 from blogAdmin import utils
+from blogAdmin import file_manager
 
 
 @login_required
 def article_publish(request):
-    return render(request, 'admin/article_edit.html')
+    qi_niu = settings.QINIU_BUCKET_DOMAIN
+    if settings.QINIU_SECURE_URL:
+        qi_niu = 'https://' + qi_niu
+    else:
+        qi_niu = 'http://' + qi_niu
+    return render(request, 'admin/article_edit.html',
+                  context={'token': file_manager.get_qiniu_token(), 'attach_url': qi_niu})
 
 
 # 修改
@@ -79,7 +86,8 @@ def admin_delete(request):
     if request.method == 'POST':
         post = get_object_or_404(Post, pk=request.POST['pk'])
         if post is None:
-            return HttpResponse(utils.get_failure_with_msg("文章不存在"), content_type="application/json")
+            return HttpResponse(utils.get_failure_with_msg("文章不存在"),
+                                content_type="application/json")
         else:
             post.delete()
             return HttpResponse(utils.get_success(), content_type="application/json")

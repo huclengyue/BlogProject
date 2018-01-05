@@ -42,4 +42,4 @@ def save_to_db():
 
 def delete_file(key):
     ret, info = BucketManager(qi_niu).delete(QINIU_BUCKET_NAME, key)
-    return ret
+    return info.status_code
