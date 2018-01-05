@@ -18,7 +18,7 @@
     <link rel="shortcut icon" href="{% static 'admin/images/favicon.ico' %}">
     <meta http-equiv="cleartype" content="on">
 
-{#    <link rel="stylesheet" href="/ghost/ghost.min.css?v=a7bac749bb"/>#}
+    {#    <link rel="stylesheet" href="/ghost/ghost.min.css?v=a7bac749bb"/>#}
     <style>
         .error-content {
             -webkit-flex-grow: 1;
@@ -92,19 +92,6 @@
             line-height: 1
         }
 
-        .error-stack {
-            margin: 1rem auto;
-            padding: 2rem;
-            max-width: 800px;
-            background-color: rgba(255, 255, 255, .3)
-        }
-
-        .error-stack-list {
-            margin: 0;
-            padding: 0;
-            list-style-type: none
-        }
-
         .error-stack-list li {
             display: block
         }
@@ -117,9 +104,7 @@
             font-size: 1.2rem
         }
 
-        .error-stack-function {
-            font-weight: 700
-        }
+
     </style>
 
 </head>
@@ -130,8 +115,10 @@
             <div class="gh-view">
                 <section class="error-content error-404 js-error-container">
                     <section class="error-details">
-                        <img class="error-ghost"
-                             src="{% static 'blog/images/404.png' %}"/>
+                        <img
+                                class="error-ghost"
+                                src="{% static 'blog/images/404-2.png' %}"
+                                srcset="{% static 'blog/images/404.png' %} 1x, {% static 'blog/images/404-2.png' %} 2x"/>
                         <section class="error-message">
                             <h1 class="error-code">404</h1>
                             <h2 class="error-description">页面未找到</h2>
