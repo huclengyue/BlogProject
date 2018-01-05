@@ -18,7 +18,110 @@
     <link rel="shortcut icon" href="{% static 'admin/images/favicon.ico' %}">
     <meta http-equiv="cleartype" content="on">
 
-    <link rel="stylesheet" href="/ghost/ghost.min.css?v=a7bac749bb"/>
+{#    <link rel="stylesheet" href="/ghost/ghost.min.css?v=a7bac749bb"/>#}
+    <style>
+        .error-content {
+            -webkit-flex-grow: 1;
+            -ms-flex-positive: 1;
+            flex-grow: 1;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-justify-content: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text
+        }
+
+        .error-details {
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
+            align-items: center;
+            margin-bottom: 4rem
+        }
+
+        .error-ghost {
+            margin: 15px;
+            height: 115px
+        }
+
+        @media (max-width: 630px) {
+            .error-ghost {
+                display: none
+            }
+        }
+
+        .error-code {
+            margin: 0;
+            color: #979797;
+            font-size: 7.8rem;
+            line-height: .9em
+        }
+
+        .error-description {
+            margin: 0;
+            padding: 0;
+            border: none;
+            color: #979797;
+            font-size: 1.9rem;
+            font-weight: 300
+        }
+
+        .error-message {
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-flex-direction: column;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            margin: 15px
+        }
+
+        .error-message a {
+            margin-top: 5px;
+            font-size: 1.4rem;
+            line-height: 1
+        }
+
+        .error-stack {
+            margin: 1rem auto;
+            padding: 2rem;
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, .3)
+        }
+
+        .error-stack-list {
+            margin: 0;
+            padding: 0;
+            list-style-type: none
+        }
+
+        .error-stack-list li {
+            display: block
+        }
+
+        .error-stack-list li:before {
+            content: "\21AA";
+            display: inline-block;
+            margin-right: .5rem;
+            color: #bbb;
+            font-size: 1.2rem
+        }
+
+        .error-stack-function {
+            font-weight: 700
+        }
+    </style>
+
 </head>
 <body>
 <main role="main" id="main">
@@ -27,9 +130,8 @@
             <div class="gh-view">
                 <section class="error-content error-404 js-error-container">
                     <section class="error-details">
-                        <img
-                                class="error-ghost"
-                                src="{% static 'blog/images/404.png' %}"/>
+                        <img class="error-ghost"
+                             src="{% static 'blog/images/404.png' %}"/>
                         <section class="error-message">
                             <h1 class="error-code">404</h1>
                             <h2 class="error-description">页面未找到</h2>

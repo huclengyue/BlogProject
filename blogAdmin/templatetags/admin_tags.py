@@ -83,4 +83,5 @@ def get_file_name(file_path):
 def gravatar_url(email, size=40):
     default = "https://example.com/static/images/defaultavatar.jpg"
     return "https://www.gravatar.com/avatar/%s?%s" % (
-        hashlib.md5(email.lower().encode("utf8")).hexdigest(), parse.urlencode({'d': default, 's': str(size)}))
+        hashlib.md5(email.lower().encode("utf8")).hexdigest(),
+        parse.urlencode({'d': default, 's': str(size)}))
