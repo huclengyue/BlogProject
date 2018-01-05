@@ -9,7 +9,7 @@
     <meta http-equiv="Cache-Control" content="no-transform">
     <meta http-equiv="Cache-Control" content="no-siteapp">
     {% get_blog_set as blog %}
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'admin/images/favicon.ico' %}">
     <meta name="description" content="{{ blog.description }}">
     <meta property="og:type" content="website">
     <meta property="og:title" content="{{ blog.site_name }}">
