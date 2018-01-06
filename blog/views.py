@@ -2,11 +2,13 @@
 import markdown
 from django.db.models import Q
 from django.db.models.aggregates import Count
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import DetailView
 from django.views.generic import ListView
 
 from blog.models import Post, Category, Tag
+from blogAdmin import utils
 from comments.forms import CommentForm
 
 """
@@ -152,8 +154,8 @@ def get_tags_list(request):
 '''
 
 
-def detail(request, pk):
-    post = get_object_or_404(Post, pk=pk)
+def detail(request, slug):
+    post = get_object_or_404(Post, slug=slug)
     # 阅读量+1
     post.increase_views()
     post.body = markdown.markdown(post.body,
@@ -162,11 +164,11 @@ def detail(request, pk):
                                       'markdown.extensions.codehilite',
                                       'markdown.extensions.toc',
                                   ])
-    form = CommentForm()
+    # form = CommentForm()
     # 获取评论
-    comment_list = post.comment_set.all()
+    # comment_list = post.comment_set.all()
     # 将表单，文章，评论传递
-    context = {'post': post, 'form': form, 'comment_list': comment_list}
+    context = {'post': post}
     return render(request, 'blog/detail.html', context=context)
 
 
@@ -327,3 +329,14 @@ def page_error(request):
 
 def permission_denied(request):
     return render(request, '403.html')
+
+
+def findPost(request):
+    post_list = Post.objects.all()
+    for post in post_list:
+        if post.modified_time is None:
+            Post.objects.filter(pk=post.pk).update(modified_time =post.created_time )
+            # post.modified_time = post.created_time
+            # post.update()
+            print(post.title)
+    return HttpResponse(utils.get_success(), content_type="application/json")
