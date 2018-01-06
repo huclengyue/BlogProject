@@ -41,10 +41,11 @@ class Post(models.Model):
     # 正文
     body = models.TextField(verbose_name='正文')
     created_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
-    modified_time = models.DateTimeField(auto_now_add=True, verbose_name='修改时间')
+    modified_time = models.DateTimeField(auto_now=True, blank=True, null=True, verbose_name='修改时间')
     # 摘要
     # 指定 CharField 的 blank=True 参数值后就可以允许空值了。
-    excerpt = models.CharField(max_length=200, blank=True, editable=False, verbose_name='摘要')
+    excerpt = models.CharField(max_length=200, blank=True, null=True, editable=False,
+                               verbose_name='摘要')
     tags = models.ManyToManyField(Tag, blank=True, verbose_name='标签')
     # 分类的外键
     # 我们规定一篇文章只能对应一个分类，但是一个分类下可以有多篇文章，所以我们使用的是 ForeignKey，即一对多的关联关系。
@@ -88,7 +89,7 @@ class Post(models.Model):
             # 先将 Markdown 文本渲染成 HTML 文本
             # strip_tags 去掉 HTML 文本的全部 HTML 标签
             # 从文本摘取前 54 个字符赋给 excerpt
-            # self.excerpt = strip_tags(md.convert(self.body))[:200]
+            # self.excerpt = md.convert(self.body)[:200]
             self.excerpt = strip_tags(md.convert(self.body))[:200]
             # 调用父类的 save 方法将数据保存到数据库中
         super(Post, self).save(force_insert, force_update, using,

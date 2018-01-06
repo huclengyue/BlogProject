@@ -224,6 +224,7 @@
             }
         });
     }
+
     var clipboard = new Clipboard('button.copy', {
         text: function (trigger) {
             return $(trigger).attr('url');
@@ -266,6 +267,7 @@
             data: {
                 csrfmiddlewaretoken: '{{ csrf_token }}'
             },
+            async: true,
             success: function (result) {
                 tale.hideLoading()
                 if (result && result.success) {

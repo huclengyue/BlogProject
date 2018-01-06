@@ -36,29 +36,29 @@ def article_create(request):
         categories = request.POST['categories']
         if not pk.strip():
             # try:
-                post = Post.objects.create(title=title, body=content)
-                # tag 整理
-                save_post_tag(tags, post)
-                # 分类
-                save_post_categories(categories, post)
-                return HttpResponse(utils.get_success(), content_type="application/json")
-            # except:
-            #     return HttpResponse(utils.get_failure(), content_type="application/json")
+            post = Post.objects.create(title=title, body=content)
+            # tag 整理
+            save_post_tag(tags, post)
+            # 分类
+            save_post_categories(categories, post)
+            return HttpResponse(utils.get_success(), content_type="application/json")
+        # except:
+        #     return HttpResponse(utils.get_failure(), content_type="application/json")
         else:
-            try:
-                post = get_object_or_404(Post, pk=pk)
-                post.title = title
-                post.body = content
-                post.save()
-                # 清空post的tag
-                post.tags.clear()
-                save_post_tag(tags, post)
-                # 分类
-                # post.category.clean()
-                save_post_categories(categories, post)
-                return HttpResponse(utils.get_success(), content_type="application/json")
-            except:
-                return HttpResponse(utils.get_failure(), content_type="application/json")
+            # try:
+            post = get_object_or_404(Post, pk=pk)
+            post.title = title
+            post.body = content
+            post.save()
+            # 清空post的tag
+            post.tags.clear()
+            save_post_tag(tags, post)
+            # 分类
+            # post.category.clean()
+            save_post_categories(categories, post)
+            return HttpResponse(utils.get_success(), content_type="application/json")
+        # except:
+        #     return HttpResponse(utils.get_failure(), content_type="application/json")
 
 
 # 不能加 login_required 否则报错
@@ -116,3 +116,8 @@ class PostDetailView(LoginRequiredMixin, DetailView):
     model = Post
     template_name = 'admin/article_edit.html'
     context_object_name = 'post'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({'token': file_manager.get_qiniu_token()})
+        return context

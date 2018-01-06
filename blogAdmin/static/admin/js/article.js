@@ -192,10 +192,13 @@ function subArticle(status) {
     $("#articleForm #categories").val($('#multiple-sel').val());
     var params = $("#articleForm").serialize();
     var url = $('#articleForm #pk').val() != '' ? '/xadmin/article/modify/' : '/xadmin/article/modify/';
+    tale.showLoading()
     tale.post({
         url: url,
         data: params,
+        async: true,
         success: function (result) {
+            tale.hideLoading()
             if (result && result.success) {
                 tale.alertOk({
                     text: '文章保存成功',

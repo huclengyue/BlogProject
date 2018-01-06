@@ -36,11 +36,11 @@ class IndexView(ListView):
     model = Post
     template_name = 'blog/index.html'
     context_object_name = 'post_list'
-    paginate_by = 5
+    paginate_by = 10
 
 
 def get_tags_list(request):
-    tags_list = Tag.objects.annotate(num_posts=Count('post')).filter(num_posts__gt=0)
+    tags_list = Tag.objects.annotate(num_posts=Count('post'))
     return render(request, 'blog/tags.html', context={'tags_list': tags_list})
 
 

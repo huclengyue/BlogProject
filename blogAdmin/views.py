@@ -15,7 +15,8 @@ def admin_index(request):
     if utils.isEmpty(user.nickname):
         user.nickname = user.username
         user.save()
-    if Category.objects.all().count() == 0:
+    # 所以空都将计算为False，非空为True
+    if len(Category.objects.filter(name='默认分类')) == 0:
         Category.objects.get_or_create(name='默认分类')
     if Attach.objects.all().count() == 0:
         file_manager.save_to_db()
@@ -86,7 +87,8 @@ def admin_setting(request):
             description = request.POST['site_description']
             keywords = request.POST['site_keywords']
             if utils.isEmpty(title):
-                return HttpResponse(utils.get_failure_with_msg("站点名称不能为空"), content_type="application/json")
+                return HttpResponse(utils.get_failure_with_msg("站点名称不能为空"),
+                                    content_type="application/json")
             else:
                 blogset = BlogSet.objects.first()
                 if blogset is None:
