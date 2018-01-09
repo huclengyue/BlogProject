@@ -36,7 +36,7 @@ def article_create(request):
         categories = request.POST['categories']
         if not pk.strip():
             # try:
-            post = Post.objects.create(title=title, body=content)
+            post = Post.objects.create(title=title, body=content, slug=utils.get_pinyin(title))
             # tag 整理
             save_post_tag(tags, post)
             # 分类
@@ -48,6 +48,7 @@ def article_create(request):
             # try:
             post = get_object_or_404(Post, pk=pk)
             post.title = title
+            post.slug = utils.get_pinyin(title)
             post.body = content
             post.save()
             # 清空post的tag
@@ -68,6 +69,8 @@ def save_post_tag(tags, post):
         tag_list = tags.split(",")
         for tag in tag_list:
             post_tag = Tag.objects.get_or_create(name=tag)
+            if post_tag[0].slug is None:
+                post_tag[0].slug = utils.get_pinyin(tag)
             post.tags.add(post_tag[0])
             post.save()
 
@@ -77,6 +80,8 @@ def save_post_categories(categories, post):
         cate_list = categories.split(",")
         for cate in cate_list:
             post_cate = Category.objects.get_or_create(name=cate)
+            if post_cate[0].slug is None:
+                post_cate[0].slug = utils.get_pinyin(cate)
             post.category = post_cate[0]
             post.save()
 

@@ -28,7 +28,8 @@ def admin_category_delete(request):
     if request.method == 'POST':
         category = get_object_or_404(Category, pk=request.POST['mid'])
         if category is None:
-            return HttpResponse(utils.get_failure_with_msg("分类不存在"), content_type="application/json")
+            return HttpResponse(utils.get_failure_with_msg("分类不存在"),
+                                content_type="application/json")
         else:
             category.delete()
             return HttpResponse(utils.get_success(), content_type="application/json")
@@ -43,7 +44,7 @@ def admin_category_save(request):
             pk = request.POST['mid']
             name = request.POST['cname']
             if utils.isEmpty(pk):
-                Category.objects.create(name=name)
+                Category.objects.create(name=name, slug=utils.get_pinyin(name))
                 return HttpResponse(utils.get_success(), content_type="application/json")
             else:
                 category = get_object_or_404(Category, pk=request.POST['mid'])
@@ -59,7 +60,8 @@ def admin_tag_delete(request):
     if request.method == 'POST':
         tag = get_object_or_404(Tag, pk=request.POST['mid'])
         if tag is None:
-            return HttpResponse(utils.get_failure_with_msg("分类不存在"), content_type="application/json")
+            return HttpResponse(utils.get_failure_with_msg("分类不存在"),
+                                content_type="application/json")
         else:
             tag.delete()
             return HttpResponse(utils.get_success(), content_type="application/json")

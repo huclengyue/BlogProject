@@ -154,22 +154,26 @@ def get_tags_list(request):
 '''
 
 
+# shi-pei-san-xing-Galaxy-S8-ji-S8+
 def detail(request, slug):
-    post = get_object_or_404(Post, slug=slug)
-    # 阅读量+1
-    post.increase_views()
-    post.body = markdown.markdown(post.body,
-                                  extensions=[
-                                      'markdown.extensions.extra',
-                                      'markdown.extensions.codehilite',
-                                      'markdown.extensions.toc',
-                                  ])
-    # form = CommentForm()
-    # 获取评论
-    # comment_list = post.comment_set.all()
-    # 将表单，文章，评论传递
-    context = {'post': post}
-    return render(request, 'blog/detail.html', context=context)
+    post = Post.objects.get(slug=slug)
+    if post:
+        # 阅读量+1
+        post.increase_views()
+        post.body = markdown.markdown(post.body,
+                                      extensions=[
+                                          'markdown.extensions.extra',
+                                          'markdown.extensions.codehilite',
+                                          'markdown.extensions.toc',
+                                      ])
+        # form = CommentForm()
+        # 获取评论
+        # comment_list = post.comment_set.all()
+        # 将表单，文章，评论传递
+        context = {'post': post}
+        return render(request, 'blog/detail.html', context=context)
+    else:
+        return render(request, 'blog/detail.html', context={'post': None})
 
 
 class PostDetailView(DetailView):
@@ -277,7 +281,7 @@ class CategoryViewByName(ListView):
     context_object_name = 'post_list'
 
     def get_queryset(self):
-        cate = get_object_or_404(Category, name=self.kwargs.get('name'))
+        cate = get_object_or_404(Category, slug=self.kwargs.get('slug'))
         return super(CategoryViewByName, self).get_queryset().filter(category=cate)
 
 
@@ -298,8 +302,9 @@ class TagViewByName(ListView):
     query_tag = ''
 
     def get_queryset(self):
-        self.query_tag = self.kwargs.get('name')
-        cate = get_object_or_404(Tag, name=self.query_tag)
+        # 获取tag
+        cate = get_object_or_404(Tag, slug=self.kwargs.get('slug'))
+        self.query_tag = cate.name
         return super().get_queryset().filter(tags=cate)
 
     def get_context_data(self, **kwargs):
@@ -332,11 +337,12 @@ def permission_denied(request):
 
 
 def findPost(request):
-    post_list = Post.objects.all()
-    for post in post_list:
-        if post.modified_time is None:
-            Post.objects.filter(pk=post.pk).update(modified_time =post.created_time )
-            # post.modified_time = post.created_time
-            # post.update()
-            print(post.title)
+    # post_list = Post.objects.all()
+    # for post in post_list:
+    #     post.save()
+    tag_list = Category.objects.all()
+    for tag in tag_list:
+        if tag.slug is None:
+            tag.slug = utils.get_pinyin(tag.name)
+            tag.save()
     return HttpResponse(utils.get_success(), content_type="application/json")

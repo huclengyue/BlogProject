@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import json
+import xpinyin
+
+
+def get_pinyin(chinese):
+    p = xpinyin.Pinyin()
+    return p.get_pinyin(chinese).replace(" ", "-").replace("-、", "")
 
 
 def get_success():

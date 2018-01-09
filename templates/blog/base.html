@@ -89,17 +89,23 @@
                         </a>
                     </li>
                     <li class="menu-item menu-item-home nav- nav-current" role="presentation">
+                        <a href="{% url 'blog:category' 'Android'   %}" rel="section">
+                            <i class="menu-item-icon fa fa-android fa-fw"></i> <br>Android
+                        </a>
+                    </li>
+                    <li class="menu-item menu-item-home nav-" role="presentation">
+                        <a href="{% url 'blog:tag' 'sui-yue-ru-ge'   %}" rel="section">
+                            <i class="menu-item-icon fa fa-heart fa-fw"></i> <br>岁月如歌
+                        </a>
+                    </li>
+                    <li class="menu-item menu-item-home nav- nav-current" role="presentation">
                         <a href="/records/" rel="section">
                             <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档
                         </a>
                     </li>
-                    <li class="menu-item menu-item-home nav-" role="presentation">
-                        <a href="{% url 'blog:index' %}tag/sui-yue-ru-ge/" rel="section">
-                            <i class="menu-item-icon fa fa-home fa-fw"></i> <br>岁月如歌
-                        </a>
-                    </li>
+
                     <li class="menu-item menu-item-home nav-tags" role="presentation">
-                        <a href="{% url 'blog:index' %}tags/" rel="section">
+                        <a href="{% url 'blog:tag_list' %}" rel="section">
                             <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags
                         </a>
                     </li>
@@ -109,12 +115,12 @@
                     {#                        </a>#}
                     {#                    </li>#}
 
-                    <li class="menu-item menu-item-search">
-                        <a href="javascript:;" class="popup-trigger">
-                            <i class="menu-item-icon fa fa-search fa-fw"></i> <br/>
-                            搜索
-                        </a>
-                    </li>
+{#                    <li class="menu-item menu-item-search">#}
+{#                        <a href="javascript:;" class="popup-trigger">#}
+{#                            <i class="menu-item-icon fa fa-search fa-fw"></i> <br/>#}
+{#                            搜索#}
+{#                        </a>#}
+{#                    </li>#}
                 </ul>
                 <div class="site-search">
                     <div class="algolia-popup popup search-popup">

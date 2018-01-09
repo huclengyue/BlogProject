@@ -14,9 +14,9 @@ from django.utils.html import strip_tags
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
-    created_time = models.DateTimeField(auto_now_add=True,null=True, verbose_name='创建时间')
+    created_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name='创建时间')
     # 别名
-    slug = models.CharField(max_length=150, blank=True, null=True, verbose_name='分类别名')
+    slug = models.CharField(max_length=150, default="", null=True, verbose_name='分类别名')
 
     def __str__(self):
         return self.name
@@ -28,9 +28,9 @@ class Category(models.Model):
 # 标签
 class Tag(models.Model):
     name = models.CharField(max_length=100)
-    created_time = models.DateTimeField(auto_now_add=True, null=True,verbose_name='创建时间')
+    created_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name='创建时间')
     # 别名
-    slug = models.CharField(max_length=150, blank=True, null=True, verbose_name='标签别名')
+    slug = models.CharField(max_length=150, default="", null=True, verbose_name='标签别名')
 
     def __str__(self):
         return self.name
@@ -69,7 +69,7 @@ class Post(models.Model):
     # 阅读量
     views = models.PositiveIntegerField(default=0, editable=False)
     # 别名
-    slug = models.CharField(max_length=150, verbose_name='文章别名', null=True)
+    slug = models.CharField(max_length=150, verbose_name='文章别名', null=True, default="")
 
     def __str__(self):
         return self.title

@@ -11,7 +11,7 @@
                     </div>
                     <div class="tag-cloud-tags">
                         {% for tag in tags_list %}
-                            <a href="{% url 'blog:tag' tag.name %}" post-num="{{ tag.num_posts }}"
+                            <a href="{% url 'blog:tag' tag.slug %}" post-num="{{ tag.num_posts }}"
                                class="tags-cloud">{{ tag.name }}</a>
                         {% endfor %}
                     </div>

@@ -1,3 +1,5 @@
-from django.test import TestCase
+from xpinyin import Pinyin
 
-# Create your tests here.
+test = Pinyin()
+
+print(test.get_pinyin('钓鱼岛、是、23 new time 中国的wewqeqweqwe ew we weq  we qwe qw').replace(" ", "-").replace("-、", ""))
