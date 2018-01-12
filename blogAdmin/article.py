@@ -68,7 +68,7 @@ def save_post_tag(tags, post):
     if tags.strip():
         tag_list = tags.split(",")
         for tag in tag_list:
-            post_tag = Tag.objects.get_or_create(name=tag)
+            post_tag = Tag.objects.get_or_create(name=tag, slug=utils.get_pinyin(tag))
             if post_tag[0].slug is None:
                 post_tag[0].slug = utils.get_pinyin(tag)
             post.tags.add(post_tag[0])
@@ -79,7 +79,7 @@ def save_post_categories(categories, post):
     if categories.strip():
         cate_list = categories.split(",")
         for cate in cate_list:
-            post_cate = Category.objects.get_or_create(name=cate)
+            post_cate = Category.objects.get_or_create(name=cate, slug=utils.get_pinyin(cate))
             if post_cate[0].slug is None:
                 post_cate[0].slug = utils.get_pinyin(cate)
             post.category = post_cate[0]
