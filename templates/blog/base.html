@@ -23,8 +23,8 @@
 
     <!-- Style Sheet-->
 
-    <link rel="stylesheet" href="{% static 'blog/vendors/fancybox/jquery.fancybox.css' %}">
-    <link rel="stylesheet" href="{% static 'blog/vendors/font-awesome/css/font-awesome.min.css' %}"
+    <link rel="stylesheet" href="//cdn.staticfile.org/fancybox/3.0.47/jquery.fancybox.min.css">
+    <link rel="stylesheet" href="//cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.min.css"
           type="text/css">
     <link rel="stylesheet" href="{% static 'blog/css/main.css' %}" type="text/css">
 
@@ -220,10 +220,9 @@
         <div class="footer-inner">
 
             <div class="powered-by">
-                Powered&nbsp;by&nbsp;<a class="theme-link" href="http://ghost.org">Ghost</a>
+                Powered&nbsp;by&nbsp;<a class="theme-link" href="http://apkdv.com">MyBLog</a>
                 <div class="ghost-footer" style="display:inline-block;">
-                    <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-                    document.write(unescape("%3Cspan id='cnzz_stat_icon_1256437202'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1256437202%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+
                 </div>
             </div>
 
@@ -242,17 +241,19 @@
 
     });
 </script>
-<script type="text/javascript" src="{% static 'blog/vendors/velocity/velocity.min.js' %}"></script>
+<script type="text/javascript" src="//cdn.staticfile.org/velocity/1.2.2/velocity.min.js"></script>
 <script type="text/javascript"
-        src="{% static 'blog/vendors/velocity/velocity.ui.min.js' %}"></script>
+        src="//cdn.staticfile.org/velocity/1.2.2/velocity.ui.min.js"></script>
 <script type="text/javascript"
-        src="{% static 'blog/vendors/fastclick/lib/fastclick.min.js' %}"></script>
+        src="//cdn.staticfile.org/fastclick/1.0.6/fastclick.min.js"></script>
+
+{#百度CND#}
 <script type="text/javascript"
-        src="{% static 'blog/vendors/jquery_lazyload/jquery.lazyload.js' %}"></script>
+        src="//apps.bdimg.com/libs/jquery-lazyload/1.9.5/jquery.lazyload.js"></script>
 <script type="text/javascript"
-        src="{% static 'blog/vendors/fancybox/jquery.fancybox.pack.js' %}"></script>
+        src="//cdn.staticfile.org/fancybox/3.0.47/jquery.fancybox.min.js"></script>
 <script type="text/javascript"
-        src="{% static 'blog/vendors/ua-parser-js/ua-parser.pack.js' %}"></script>
+        src="//cdn.bootcss.com/UAParser.js/0.7.17/ua-parser.min.js"></script>
 <script type="text/javascript" src="{% static 'blog/js/motion.js' %}"></script>
 <script type="text/javascript" src="{% static 'blog/js/utils.js' %}"></script>
 <script type="text/javascript" src="{% static 'blog/js/affix.js' %}"></script>
