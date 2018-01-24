@@ -36,9 +36,15 @@ def index(request):
 
 class IndexView(ListView):
     model = Post
-    template_name = 'blog/index.html'
+    template_name = 'blog2/index.html'
     context_object_name = 'post_list'
     paginate_by = 10
+#
+# class IndexView(ListView):
+#     model = Post
+#     template_name = 'blog/index.html'
+#     context_object_name = 'post_list'
+#     paginate_by = 10
 
 
 def get_tags_list(request):
@@ -155,6 +161,25 @@ def get_tags_list(request):
 
 
 # shi-pei-san-xing-Galaxy-S8-ji-S8+
+# def detail(request, slug):
+#     post = Post.objects.get(slug=slug)
+#     if post:
+#         # 阅读量+1
+#         post.increase_views()
+#         post.body = markdown.markdown(post.body,
+#                                       extensions=[
+#                                           'markdown.extensions.extra',
+#                                           'markdown.extensions.codehilite',
+#                                           'markdown.extensions.toc',
+#                                       ])
+#         # form = CommentForm()
+#         # 获取评论
+#         # comment_list = post.comment_set.all()
+#         # 将表单，文章，评论传递
+#         context = {'post': post}
+#         return render(request, 'blog/detail.html', context=context)
+#     else:
+#         return render(request, 'blog/detail.html', context={'post': None})
 def detail(request, slug):
     post = Post.objects.get(slug=slug)
     if post:
@@ -171,9 +196,9 @@ def detail(request, slug):
         # comment_list = post.comment_set.all()
         # 将表单，文章，评论传递
         context = {'post': post}
-        return render(request, 'blog/detail.html', context=context)
+        return render(request, 'blog2/detail.html', context=context)
     else:
-        return render(request, 'blog/detail.html', context={'post': None})
+        return render(request, 'blog2/detail.html', context={'post': None})
 
 
 class PostDetailView(DetailView):

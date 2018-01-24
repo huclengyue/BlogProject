@@ -1,0 +1,98 @@
+{% extends 'blog2/base.html' %}
+{% load blog_tags %}
+{% block header %}
+    {% get_blog_set as blog %}
+    {% url 'blog:index' as blog_url %}
+    {% include 'blog2/header.html' with keywords=blog.keywords description=blog.description title=blog.site_name url=blog_url setType='website' type='page-homel' %}
+{% endblock %}
+{% block content %}
+    {% get_blog_set as blogSet %}
+    <section id="posts" class="posts-expand">
+        {% for post in post_list %}
+            <article class="post post-type-normal" itemscope="">
+                <div class="post-block">
+                    <link itemprop="mainEntityOfPage"
+                          href="{% url 'blog:detail_slug' slug=post.slug %}"/>
+                    <span hidden="" itemprop="author" itemscope="">
+      <meta itemprop="name" content="{% get_author %}"/>
+      <meta itemprop="description" content="{{ post.body|truncatechars_html:100 }}"/>
+      <meta itemprop="image" content="{% avatar_url %}"/> </span>
+                    <span hidden="" itemprop="publisher" itemscope="">
+      <meta itemprop="name" content="{{ blogSet.site_name }}"/> </span>
+                    <header class="post-header">
+                        <h1 class="post-title" itemprop="name headline">
+                            <a class="post-title-link"
+                               href="{% url 'blog:detail_slug' slug=post.slug %}"
+                               itemprop="url">{{ post.title }}</a>
+                        </h1>
+                        <div class="post-meta">
+                        <span class="post-time"> <span class="post-meta-item-icon"> <i
+                                class="fa fa-calendar-o"></i> </span> <span
+                                class="post-meta-item-text">发表于</span> <time title="创建于"
+                                                                             itemprop="dateCreated datePublished"
+                                                                             datetime="{{ post.created_time }}"> {{ post.created_time|date:"Y-m-d" }} </time> <span
+                                class="post-meta-divider">|</span> <span
+                                class="post-meta-item-icon"> <i class="fa fa-calendar-check-o"></i> </span> <span
+                                class="post-meta-item-text">更新于</span> <time title="更新于"
+                                                                             itemprop="dateModified"
+                                                                             datetime="{{ post.modified_time }}"> {{ post.modified_time|date:"Y-m-d" }} </time> </span>
+                            <span class="post-category"> <span
+                                    class="post-meta-divider">|</span> <span
+                                    class="post-meta-item-icon"> <i
+                                    class="fa fa-folder-o"></i> </span> <span
+                                    class="post-meta-item-text">分类于</span> <span itemprop="about"
+                                                                                 itemscope="">
+                                <a href="{% url "blog:category" post.category.slug %}"
+                                   itemprop="url" rel="index"> <span
+                                        itemprop="name">{{ post.category.name }}</span> </a> </span> </span>
+                            <span class="post-meta-divider">|</span> <span
+                                class="post-meta-item-icon"> <i
+                                class="fa fa-eye"></i> </span> <span
+                                class="post-meta-item-text">阅读次数</span> <span
+                                class="leancloud-visitors-count"> {{ post.views }}次</span> </span>
+                            <div class="post-wordcount">
+                            <span class="post-meta-item-icon"> <i
+                                    class="fa fa-file-word-o"></i> </span>
+                                <span class="post-meta-item-text">字数统计</span>
+                                <span title="字数统计"> {{ post.body|length }} 字 </span>
+                                <span class="post-meta-divider">|</span>
+                                <span class="post-meta-item-icon"> <i
+                                        class="fa fa-tags"></i> </span>
+                                <span class="post-meta-item-text">标签</span>
+                                <span itemprop="about" itemscope="">
+                                      {% for tag in post.tags.all %}
+                                          <a href="{% url 'blog:tag' tag.slug %}">{{ tag.name }}</a>
+                                          {% if not forloop.last %},{% endif %}
+                                      {% endfor %}
+                                 </span>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="post-body" itemprop="articleBody">
+                        {% if post.excerpt %}
+                            <p>{{ post.excerpt|safe }}...</p>
+                        {% else %}
+                            <p>{{ post.body|truncatechars_html:200 }}...</p>
+                        {% endif %}
+                        <div class="post-button text-center">
+                            <a class="btn" href="{% url 'blog:detail_slug' post.slug %}"
+                               rel="contents">阅读全文 &raquo; </a>
+                        </div>
+                    </div>
+                    <footer class="post-footer">
+                        <div class="post-eof"></div>
+                    </footer>
+                </div>
+            </article>
+        {% empty %}
+            <div class="no-post">暂时还没有发布的文章！</div>
+        {% endfor %}
+    </section>
+    <nav class="pagination">
+        <span class="page-number current">1</span>
+        <a class="page-number" href="/page/2/">2</a>
+        <span class="space">…</span>
+        <a class="page-number" href="/page/9/">9</a>
+        <a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    </nav>
+{% endblock %}

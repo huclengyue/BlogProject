@@ -7,7 +7,7 @@ from django import template
 from django.db.models.aggregates import Count
 
 from blog.models import Post, Category, Tag, BlogSet, Friendly, Catalog
-from blogAdmin.models import Attach
+from blogAdmin.models import Attach, User
 from comments.models import Comment
 
 register = template.Library()
@@ -26,6 +26,22 @@ def get_recent_comment(num=5):
 @register.simple_tag()
 def archives():
     return Post.objects.dates("created_time", 'year', order="DESC")
+
+
+@register.simple_tag()
+def get_up_article(key):
+    try:
+        return Post.objects.filter(id__gt=key)[:1]
+    except:
+        return None
+
+
+@register.simple_tag()
+def get_down_article(key):
+    try:
+        return Post.objects.filter(id__lt=key)[:1]
+    except:
+        return None
 
 
 # 分类模板
@@ -73,8 +89,21 @@ def get_tags_count():
 
 
 @register.simple_tag()
-def gravatar_url(email, size=40):
-    default = "https://example.com/static/images/defaultavatar.jpg"
-    return "https://www.gravatar.com/avatar/%s?%s" % (
-        hashlib.md5(email.lower().encode("utf8")).hexdigest(),
-        parse.urlencode({'d': default, 's': str(size)}))
+def get_author():
+    user = User.objects.first()
+    if user.nickname:
+        return user.nickname
+    else:
+        return user.username
+
+
+@register.simple_tag()
+def avatar_url():
+    user = User.objects.first()
+    if user.avatar:
+        return user.avatar
+    else:
+        default = "https://example.com/static/images/defaultavatar.jpg"
+        return "https://www.gravatar.com/avatar/%s?%s" % (
+            hashlib.md5(user.email.lower().encode("utf8")).hexdigest(),
+            parse.urlencode({'d': default, 's': str(60)}))
