@@ -1,32 +1,38 @@
 {% extends 'blog/base.html' %}
 {% load blog_tags %}
-{% block title %}{{ tag_name }}&nbsp;-&nbsp;{{ blog.site_name }}{% endblock title %}
-{% block main %}
-    <div class="content-wrap">
-        <div id="content" class="content">
+{% block header %}
+    {% get_blog_set as blog %}
+    {% url 'blog:index' as blog_url %}
+    {% include 'blog/header.html' with keywords=blog.keywords description=blog.description title="标签: "|add:tag_name|add:" | "|add:blog.site_name url=blog_url setType='website' %}
+{% endblock %}
+{% block content %}
 
-            <div id="posts" class="posts-collapse">
-                <div class="collection-title">
-                    <h2>{{ tag_name }}&nbsp;<small>标签</small>
-                    </h2>
-                </div>
-                {% for post in post_list %}
-                    <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-                        <header class="post-header">
-                            <h1 class="post-title" style="margin-left: 94px">
-                                <a class="post-title-link" href="{% url 'blog:detail_slug' slug=post.slug %}" itemprop="url">
-                                    <span itemprop="name">{{ post.title }}</span>
-                                </a>
-                            </h1>
-                            <div class="post-meta">
-                                <time>
-                                    {{ post.created_time|date:"Y-m-d" }}
-                                </time>
-                            </div>
-                        </header>
-                    </article>
-                {% endfor %}
+    <div class="post-block tag">
+        <div id="posts" class="posts-collapse">
+            <div class="collection-title">
+                <h1>{{ tag_name }}&nbsp;<small>标签</small>
+                </h1>
             </div>
+            {% for post in post_list %}
+                <article class="post post-type-normal" itemscope
+                         itemtype="http://schema.org/Article">
+                    <header class="post-header">
+                        <h2 class="post-title">
+                            <a class="post-title-link"
+                               href="{% url 'blog:detail_slug' slug=post.slug %}" itemprop="url">
+                                <span itemprop="name">{{ post.title }}</span>
+                            </a>
+                        </h2>
+                        <div class="post-meta">
+                            <time class="post-time" itemprop="dateCreated"
+                                  datetime="{{ post.created_time }}"
+                                  content="{{ post.created_time|date:"Y-m-d" }}">
+                                {{ post.created_time|date:"m-d" }}
+                            </time>
+                        </div>
+                    </header>
+                </article>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

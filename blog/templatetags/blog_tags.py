@@ -31,7 +31,7 @@ def archives():
 @register.simple_tag()
 def get_up_article(key):
     try:
-        return Post.objects.filter(id__gt=key)[:1]
+        return Post.objects.filter(id__gt=key).order_by('id')[0]
     except:
         return None
 
@@ -39,7 +39,7 @@ def get_up_article(key):
 @register.simple_tag()
 def get_down_article(key):
     try:
-        return Post.objects.filter(id__lt=key)[:1]
+        return Post.objects.filter(id__lt=key)[0]
     except:
         return None
 
@@ -55,7 +55,8 @@ def get_categories():
 @register.simple_tag()
 def get_tags():
     # 查找所有TAG  并且 将tag的文章数保存到num_posts中 并且过滤num_posts==0的tag
-    return Tag.objects.annotate(num_posts=Count('post')).filter(num_posts__gt=0)
+    return Tag.objects.annotate(num_posts=Count('post')).filter(num_posts__gt=0).order_by(
+        'num_posts', order="DESC")
 
 
 @register.simple_tag()
@@ -107,3 +108,12 @@ def avatar_url():
         return "https://www.gravatar.com/avatar/%s?%s" % (
             hashlib.md5(user.email.lower().encode("utf8")).hexdigest(),
             parse.urlencode({'d': default, 's': str(60)}))
+
+
+# 当前是否激活
+@register.simple_tag()
+def is_active(url, active):
+    if url == active:
+        return 'menu-item-active'
+    else:
+        return ''

@@ -38,28 +38,12 @@
         var CONFIG = {
             root: '/',
             scheme: 'Gemini',
-            version: '5.1.3',
-            sidebar: {
-                "position": "left",
-                "display": "post",
-                "offset": 12,
-                "b2t": true,
-                "scrollpercent": true,
-                "onmobile": false
-            },
+            sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
             fancybox: true,
+            fastclick: true,
+            lazyload: true,
             tabs: true,
-            motion: {
-                "enable": true,
-                "async": false,
-                "transition": {
-                    "post_block": "fadeIn",
-                    "post_header": "slideDownIn",
-                    "post_body": "slideDownIn",
-                    "coll_header": "slideLeftIn",
-                    "sidebar": "slideUpIn"
-                }
-            }
+            motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
         };
     </script>
 </head>
@@ -95,28 +79,28 @@
 
             <nav class="site-nav">
                 <ul id="menu" class="menu">
-                    <li class="menu-item menu-item-home">
+                    <li class="menu-item menu-item-home {% is_active request.path '/' %}">
                         <a href="/" rel="section">
                             <i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页
                         </a>
                     </li>
-                    <li class="menu-item menu-item-android menu-item-active">
+                    <li class="menu-item menu-item-android {% is_active request.path '/category/Android' %}">
                         <a href="{% url 'blog:category' 'Android' %}" rel="section">
                             <i class="menu-item-icon fa fa-android fa-fw"></i> <br>Android
                         </a>
                     </li>
-                    <li class="menu-item menu-item-home">
+                    <li class="menu-item menu-item-home {% is_active request.path '/category/sui-yue-ru-ge' %}">
                         <a href="{% url 'blog:category' 'sui-yue-ru-ge' %}" rel="section">
                             <i class="menu-item-icon fa fa-heart fa-fw"></i> <br>岁月如歌
                         </a>
                     </li>
-                    <li class="menu-item menu-item-archives">
+                    <li class="menu-item menu-item-archives {% is_active request.path '/records/' %}">
                         <a href="/records/" rel="section">
                             <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档
                         </a>
                     </li>
 
-                    <li class="menu-item menu-item-tags">
+                    <li class="menu-item menu-item-tags {% is_active request.path '/tags/' %}">
                         <a href="{% url 'blog:tag_list' %}" rel="section">
                             <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags
                         </a>
