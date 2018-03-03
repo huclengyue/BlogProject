@@ -24,7 +24,7 @@ SECRET_KEY = 'kxd!q)+a)iq-$!exc7olc896^9vru6q@x7w(nfmzgt1jf79yp@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.apkdv.com','.apkdev.io']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.apkdv.com', '.apkdev.io']
 
 # Application definition
 

@@ -25,7 +25,7 @@ def article_publish(request):
                   context={'token': file_manager.get_qiniu_token(), 'attach_url': qi_niu})
 
 
-# 修改
+# 新增或修改文章
 @login_required
 def article_create(request):
     if request.method == 'POST':

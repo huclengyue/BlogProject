@@ -38,7 +38,7 @@ $(document).ready(function () {
                             tale.alertError(result.msg || '图片上传失败');
                         }
                     },
-                    error:function(){
+                    error: function () {
                         tale.hideLoading();
                         tale.alertError('图片上传失败');
                     }
@@ -109,7 +109,6 @@ $(document).ready(function () {
     // });
 
 
-
     // var thumbdropzone = $('.dropzone');
     //
     // // 缩略图上传
@@ -171,6 +170,7 @@ function autoSave() {
     }
 }
 
+var isCommitted = false;//表单是否已经提交标识，默认为false
 /**
  * 保存文章
  * @param status
@@ -193,26 +193,31 @@ function subArticle(status) {
     var params = $("#articleForm").serialize();
     var url = $('#articleForm #pk').val() != '' ? '/xadmin/article/modify/' : '/xadmin/article/modify/';
     tale.showLoading()
-    tale.post({
-        url: url,
-        data: params,
-        async: true,
-        success: function (result) {
-            tale.hideLoading()
-            if (result && result.success) {
-                tale.alertOk({
-                    text: '文章保存成功',
-                    then: function () {
-                        setTimeout(function () {
-                            window.location.href = '/xadmin/article/';
-                        }, 500);
-                    }
-                });
-            } else {
-                tale.alertError(result.msg || '保存文章失败');
+    if (isCommitted == false) {
+        tale.post({
+            url: url,
+            data: params,
+            async: true,
+            success: function (result) {
+                tale.hideLoading()
+                isCommitted = true;
+                if (result && result.success) {
+                    isCommitted = true;
+                    tale.alertOk({
+                        text: '文章保存成功',
+                        then: function () {
+                            setTimeout(function () {
+                                window.location.href = '/xadmin/article/';
+                            }, 500);
+                        }
+                    });
+                } else {
+                    tale.alertError(result.msg || '保存文章失败');
+                }
             }
-        }
-    });
+        });
+    }
+
 }
 
 

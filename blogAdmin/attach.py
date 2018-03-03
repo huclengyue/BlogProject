@@ -7,13 +7,23 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
 from django.shortcuts import render
-
+import random
 from BlogProject.settings import QINIU_SECURE_URL, QINIU_BUCKET_DOMAIN
 from blogAdmin import file_manager, utils
 # 分页数
 from blogAdmin.models import Attach
 
 ONE_PAGE_OF_DATA = 18
+
+if hasattr(random, 'SystemRandom'):
+    randrange = random.SystemRandom().randrange
+else:
+    randrange = random.randrange
+_MAX_CSRF_KEY = 18446744073709551616  # 2 << 63
+
+
+def _get_new_submit_key():
+    return md5_constructor("%s%s" % (randrange(0, _MAX_CSRF_KEY), settings.SECRET_KEY)).hexdigest()
 
 
 @login_required
@@ -58,6 +68,7 @@ def admin_attach_refresh(request):
             return HttpResponse(utils.get_failure(), content_type="application/json")
 
 
+
 @login_required
 def admin_attach_upload(request):
     if request.method == 'POST':
@@ -74,6 +85,7 @@ def admin_attach_upload(request):
             return HttpResponse(utils.get_failure(), content_type="application/json")
 
 
+# 删除
 def admin_attach_delete(request):
     if request.method == 'POST':
         try:
